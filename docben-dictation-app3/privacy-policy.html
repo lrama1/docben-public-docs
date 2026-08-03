@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Privacy Policy for the DocBen Dictation mobile application." />
+  <title>Privacy Policy — DocBen Dictation</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #1a1a1a;
+      --muted: #555555;
+      --accent: #0b5fff;
+      --border: #e3e6ea;
+      --card: #f7f8fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.65;
+      font-size: 16px;
+    }
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+    header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 20px;
+      margin-bottom: 32px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    .subtitle {
+      color: var(--muted);
+      margin: 0;
+      font-size: 15px;
+    }
+    h2 {
+      margin-top: 36px;
+      margin-bottom: 12px;
+      font-size: 20px;
+      color: var(--fg);
+    }
+    h3 {
+      margin-top: 24px;
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+    p, li {
+      color: var(--fg);
+    }
+    ul {
+      padding-left: 22px;
+    }
+    li { margin-bottom: 6px; }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .updated {
+      display: inline-block;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Privacy Policy</h1>
+      <p class="subtitle">DocBen Dictation mobile application</p>
+      <span class="updated">Last updated: August 3, 2026</span>
+    </header>
+
+    <p>
+      This Privacy Policy describes how DocBen (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or
+      &ldquo;our&rdquo;) collects, uses, and protects information when you use the
+      DocBen Dictation mobile application (the &ldquo;App&rdquo;). The App is a
+      clinical voice dictation companion that helps physicians create PhilHealth CF4
+      claim documentation through speech-to-text transcription and AI-assisted field
+      extraction. By installing or using the App, you agree to the practices described
+      in this Policy.
+    </p>
+
+    <h2>1. Information We Collect</h2>
+
+    <h3>1.1 Information You Provide</h3>
+    <ul>
+      <li><strong>Account credentials.</strong> When you sign in, we collect your Cognito username and authentication token to verify your identity.</li>
+      <li><strong>Patient information.</strong> You may enter patient identifiers (name, birth date, sex, chart number) and clinical details needed for CF4 documentation.</li>
+      <li><strong>Dictation content.</strong> Voice recordings and the resulting transcripts, along with any AI-extracted CF4 fields you review and finalize.</li>
+    </ul>
+
+    <h3>1.2 Information Collected Automatically</h3>
+    <ul>
+      <li><strong>Device and usage data.</strong> App version, device model, operating system, and crash logs used to diagnose and fix errors.</li>
+      <li><strong>Audio recordings.</strong> Microphone audio captured during an active dictation session, with your explicit permission.</li>
+    </ul>
+
+    <h2>2. How We Use Information</h2>
+    <ul>
+      <li>To authenticate your account and authorize API requests.</li>
+      <li>To transcribe your dictation and extract structured CF4 fields using AI services.</li>
+      <li>To save and retrieve patient records and dictation history linked to your hospital group.</li>
+      <li>To operate offline features, such as caching the patient list and queuing failed saves for retry.</li>
+      <li>To improve reliability, diagnose crashes, and maintain the App.</li>
+    </ul>
+
+    <h2>3. How We Store and Protect Information</h2>
+    <p>
+      Dictation recordings are stored locally on your device during a session and are
+      deleted from the device after you save or discard the record. Transcripts and
+      finalized records are transmitted over HTTPS to our backend, where they are
+      stored in encrypted AWS DynamoDB tables. Sensitive patient fields may be
+      additionally protected with AWS KMS field-level encryption.
+    </p>
+    <p>
+      Authentication is handled through Amazon Cognito. We do not store your password
+      on the device. If you enable biometric quick re-login, only a secure reference
+      to your credentials is retained using the platform secure storage.
+    </p>
+
+    <h2>4. Data Sharing and Disclosure</h2>
+    <p>We do not sell your information. We share data only:</p>
+    <ul>
+      <li>With our cloud infrastructure providers (AWS, OpenAI) strictly to operate the transcription, extraction, and storage features.</li>
+      <li>To comply with legal obligations or respond to lawful requests from public authorities.</li>
+      <li>In connection with a merger, acquisition, or asset sale, subject to confidentiality protections.</li>
+    </ul>
+
+    <h2>5. Third-Party Services</h2>
+    <p>The App relies on the following third-party services, each governed by its own privacy policy:</p>
+    <ul>
+      <li><strong>Amazon Cognito</strong> &mdash; authentication and user identity.</li>
+      <li><strong>Amazon Web Services (DynamoDB, S3, KMS)</strong> &mdash; data storage and encryption.</li>
+      <li><strong>OpenAI</strong> &mdash; AI-powered CF4 field extraction from transcripts.</li>
+      <li><strong>expo-speech-recognition</strong> &mdash; on-device speech-to-text transcription.</li>
+    </ul>
+
+    <h2>6. Your Rights and Choices</h2>
+    <ul>
+      <li><strong>Microphone permission.</strong> You can grant or revoke microphone access at any time through your device settings. Revoking access disables dictation.</li>
+      <li><strong>Biometric login.</strong> You can disable biometric quick re-login from the App settings at any time.</li>
+      <li><strong>Data deletion.</strong> You may delete patient records and dictation history from within the App. Account deletion requests can be sent to the contact below.</li>
+    </ul>
+
+    <h2>7. Data Retention</h2>
+    <p>
+      Local audio recordings are deleted after save or discard. Finalized dictation
+      records are retained on the backend for as long as needed to support your
+      hospital&rsquo;s CF4 documentation workflow, or until you delete them. Account
+      and authentication data is retained for the lifetime of your Cognito account.
+    </p>
+
+    <h2>8. Children&rsquo;s Privacy</h2>
+    <p>
+      The App is intended for use by licensed healthcare professionals and is not
+      directed at children under 18. We do not knowingly collect personal information
+      from children.
+    </p>
+
+    <h2>9. International Data Transfer</h2>
+    <p>
+      Your data is processed and stored on AWS infrastructure, which may be located
+      outside your country of residence. By using the App, you consent to such
+      transfers in accordance with this Policy.
+    </p>
+
+    <h2>10. Security</h2>
+    <p>
+      We use industry-standard safeguards including TLS encryption in transit,
+      AES-256 encryption at rest, and optional KMS field-level encryption for
+      sensitive patient fields. No method of transmission or storage is completely
+      secure, but we work to protect your information using reasonable technical and
+      organizational measures.
+    </p>
+
+    <h2>11. Changes to This Policy</h2>
+    <p>
+      We may update this Privacy Policy from time to time. When we do, we will revise
+      the &ldquo;Last updated&rdquo; date at the top of this page. We encourage you to
+      review this page periodically.
+    </p>
+
+    <h2>12. Contact Us</h2>
+    <div class="card">
+      <p style="margin:0;">
+        If you have questions or concerns about this Privacy Policy or your data,
+        please contact:
+      </p>
+      <p style="margin:12px 0 0;">
+        <strong>DocBen Support</strong><br />
+        Email: <a href="mailto:support@docben.com">support@docben.com</a>
+      </p>
+    </div>
+
+    <footer>
+      &copy; 2026 DocBen. All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>
