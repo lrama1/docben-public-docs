@@ -1,0 +1,25 @@
+meta {
+  name: 06 - Upload Complete
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/public/v1/uploads/complete
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "uploadId": "{{uploadId}}",
+    "attachmentId": "{{attachmentId}}",
+    "s3Key": "{{s3Key}}",
+    "fileName": "cbc-result.pdf",
+    "size": 102400,
+    "contentType": "application/pdf",
+    "parts": [
+      { "partNumber": 1, "etag": "{{etag}}" }
+    ]
+  }
+}

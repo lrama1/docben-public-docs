@@ -1,0 +1,27 @@
+meta {
+  name: 04 - Upload Init
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/public/v1/uploads/init
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "fileName": "cbc-result.pdf",
+    "size": 102400,
+    "contentType": "application/pdf"
+  }
+}
+
+script:post-response {
+  if (res.body) {
+    bru.setEnvVar("uploadId", res.body.uploadId);
+    bru.setEnvVar("attachmentId", res.body.attachmentId);
+    bru.setEnvVar("s3Key", res.body.s3Key);
+  }
+}

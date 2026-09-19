@@ -1,0 +1,11 @@
+meta {
+  name: 03 - Get Validation (poll)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/public/v1/validations/{{sessionId}}
+  body: none
+  auth: none
+}

@@ -1,0 +1,20 @@
+{
+  "name": "docben-cf4-api-client-examples",
+  "version": "1.0.0",
+  "description": "Example clients for the DocBen CF4 Validation API",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start:js": "node docbenClient.js",
+    "start:ts": "ts-node docbenClient.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  }
+}

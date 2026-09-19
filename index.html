@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="DocBen public documentation — CF4 Validation API integration guide, client examples, and product privacy policies." />
+<title>DocBen — Public Documentation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #1a2230;
+    --panel2: #222c3d;
+    --border: #33415480;
+    --text: #e6edf3;
+    --muted: #8b98a9;
+    --accent: #4f9cf9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    padding: 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+  }
+  header h1 { margin: 0; font-size: 24px; }
+  header p { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+  main { max-width: 900px; margin: 0 auto; padding: 32px 28px 80px; }
+  h2 { font-size: 16px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin: 28px 0 12px; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
+  .card {
+    display: block;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color .15s, transform .15s;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card h3 { margin: 0 0 8px; font-size: 17px; color: var(--accent); }
+  .card p { margin: 0; font-size: 13px; color: var(--muted); }
+  .card .go { display: inline-block; margin-top: 12px; font-size: 12px; color: var(--accent); font-weight: 600; }
+  footer { padding: 24px 28px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; text-align: center; }
+  code { background: var(--panel2); padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>DocBen Public Documentation</h1>
+  <p>Integration guides, client examples, and product privacy policies.</p>
+</header>
+
+<main>
+  <h2>CF4 Validation API</h2>
+  <div class="cards">
+    <a class="card" href="cf4-api/README.md">
+      <h3>Integration Guide</h3>
+      <p>Authentication, quotas &amp; limits, endpoint reference, attachments, step-by-step, sample code, error reference, and FAQ.</p>
+      <span class="go">Read the guide →</span>
+    </a>
+    <a class="card" href="cf4-api/openapi.yaml">
+      <h3>OpenAPI 3.0 Spec</h3>
+      <p>Machine-readable API definition. Generate a client SDK, import into Postman/Insomnia, or render interactive docs.</p>
+      <span class="go">Download openapi.yaml →</span>
+    </a>
+    <a class="card" href="cf4-api/examples/">
+      <h3>Client Examples</h3>
+      <p>Dependency-free JavaScript and fully-typed TypeScript clients (quota, upload, submit, poll) you can copy into your project.</p>
+      <span class="go">Browse examples →</span>
+    </a>
+    <a class="card" href="cf4-api/test-client/">
+      <h3>Browser Test Client</h3>
+      <p>A zero-dependency browser app for manually exercising the API — quota, attachment upload, submit, and result polling.</p>
+      <span class="go">Open test client →</span>
+    </a>
+  </div>
+
+  <h2>Product Privacy Policies</h2>
+  <div class="cards">
+    <a class="card" href="docben-dictation-app3/privacy-policy.html">
+      <h3>DocBen Dictation</h3>
+      <p>Privacy policy for the DocBen Dictation mobile application.</p>
+      <span class="go">Read policy →</span>
+    </a>
+  </div>
+
+  <p style="margin-top:32px; color:var(--muted); font-size:13px">
+    Need an API key? Contact your DocBen account manager. Keys are issued per client and are
+    shown only once — store them securely and never commit them to source control.
+  </p>
+</main>
+
+<footer>
+  &copy; 2026 DocBen. All rights reserved.
+</footer>
+</body>
+</html>

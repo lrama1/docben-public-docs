@@ -1,0 +1,27 @@
+meta {
+  name: 05 - Upload Chunk
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/public/v1/uploads/chunk
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "uploadId": "{{uploadId}}",
+    "attachmentId": "{{attachmentId}}",
+    "s3Key": "{{s3Key}}",
+    "partNumber": 1,
+    "chunkData": "BASE64_ENCODED_FILE_BYTES_HERE"
+  }
+}
+
+script:post-response {
+  if (res.body && res.body.etag) {
+    bru.setEnvVar("etag", res.body.etag);
+  }
+}

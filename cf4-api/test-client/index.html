@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DocBen CF4 API — Test Client</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #1a2230;
+    --panel2: #222c3d;
+    --border: #33415480;
+    --text: #e6edf3;
+    --muted: #8b98a9;
+    --accent: #4f9cf9;
+    --green: #3fb950;
+    --red: #f85149;
+    --amber: #d29922;
+    --mono: 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  header h1 { font-size: 18px; margin: 0; font-weight: 600; }
+  header .tag { font-size: 11px; color: var(--muted); background: var(--panel2); padding: 2px 8px; border-radius: 10px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 28px 60px; }
+  .grid { display: grid; grid-template-columns: 380px 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 20px;
+  }
+  .card h2 { font-size: 14px; margin: 0 0 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .card h2 .n { background: var(--accent); color: #fff; width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; }
+  label { display: block; font-size: 12px; color: var(--muted); margin: 10px 0 4px; }
+  input[type=text], input[type=password], input[type=number], textarea, select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  textarea { font-family: var(--mono); font-size: 12px; resize: vertical; }
+  input:focus, textarea:focus, select:focus { outline: 1px solid var(--accent); border-color: var(--accent); }
+  button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .15s;
+  }
+  button:hover { opacity: .9; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.secondary { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
+  button.small { padding: 5px 10px; font-size: 12px; }
+  .btnrow { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .mono { font-family: var(--mono); }
+  .keyrow { display: flex; gap: 8px; }
+  .keyrow input { flex: 1; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .pill.ok { background: #3fb95022; color: var(--green); }
+  .pill.err { background: #f8514922; color: var(--red); }
+  .pill.warn { background: #d2992222; color: var(--amber); }
+  .pill.info { background: #4f9cf922; color: var(--accent); }
+  .quota-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  .quota-item { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 10px; }
+  .quota-item .lbl { font-size: 11px; color: var(--muted); }
+  .quota-item .val { font-size: 18px; font-weight: 700; font-family: var(--mono); }
+  .bar { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+  .bar > div { height: 100%; background: var(--accent); }
+  pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    overflow: auto;
+    max-height: 460px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+  }
+  .log { max-height: 300px; overflow-y: auto; font-family: var(--mono); font-size: 12px; }
+  .log .line { padding: 3px 0; border-bottom: 1px solid #ffffff08; }
+  .log .t { color: var(--muted); margin-right: 8px; }
+  .log .ok { color: var(--green); }
+  .log .err { color: var(--red); }
+  .log .info { color: var(--accent); }
+  .statusline { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+  .filelist { margin-top: 10px; }
+  .fileitem { display: flex; justify-content: space-between; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; margin-top: 6px; font-size: 12px; }
+  .fileitem .meta { color: var(--muted); font-size: 11px; }
+  .fileitem button { margin-left: 8px; }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #ffffff33; border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hidden { display: none !important; }
+  .footer-note { font-size: 11px; color: var(--muted); margin-top: 8px; }
+  a { color: var(--accent); }
+  .tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+  .tab { padding: 6px 12px; font-size: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; color: var(--muted); }
+  .tab.active { background: var(--panel2); color: var(--text); border-color: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <h1>DocBen CF4 Validation API</h1>
+  <span class="tag">3rd-party integration test client</span>
+  <span class="tag mono" id="baseUrlTag"></span>
+</header>
+
+<main>
+  <!-- Connection -->
+  <div class="card">
+    <h2><span class="n">⚙</span> Connection</h2>
+    <label>Base URL</label>
+    <input type="text" id="baseUrl" placeholder="https://….execute-api.us-east-1.amazonaws.com/dev" />
+    <label>API Key <span class="hint">(sent as <code>x-api-key</code>; stored only in your browser's localStorage)</span></label>
+    <div class="keyrow">
+      <input type="password" id="apiKey" placeholder="Paste your API key" autocomplete="off" />
+      <button class="secondary small" id="toggleKey" type="button">Show</button>
+      <button class="secondary small" id="saveConn" type="button">Save</button>
+    </div>
+    <div class="statusline" id="connStatus"></div>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: actions -->
+    <div>
+      <!-- Quota -->
+      <div class="card">
+        <h2><span class="n">1</span> Quota &amp; Limits</h2>
+        <button id="btnQuota">Check Quota</button>
+        <div id="quotaOut" class="hidden">
+          <div class="quota-grid">
+            <div class="quota-item"><div class="lbl">Requests (used / quota)</div><div class="val" id="qReq">—</div><div class="bar"><div id="qReqBar"></div></div></div>
+            <div class="quota-item"><div class="lbl">Tokens (used / cap)</div><div class="val" id="qTok">—</div><div class="bar"><div id="qTokBar"></div></div></div>
+            <div class="quota-item"><div class="lbl">Rate limit</div><div class="val" id="qRps">—</div></div>
+            <div class="quota-item"><div class="lbl">Resets on</div><div class="val" id="qReset" style="font-size:14px">—</div></div>
+          </div>
+          <div class="hint" id="qClient"></div>
+        </div>
+      </div>
+
+      <!-- Attachments -->
+      <div class="card">
+        <h2><span class="n">2</span> Attachments <span class="hint">(optional)</span></h2>
+        <input type="file" id="fileInput" multiple />
+        <div class="hint">Files upload via the 3-step multipart flow (init → chunk(s) → complete), then are referenced in the validation.</div>
+        <div class="filelist" id="fileList"></div>
+      </div>
+
+      <!-- Submit -->
+      <div class="card">
+        <h2><span class="n">3</span> Submit Validation</h2>
+        <div class="tabs">
+          <div class="tab active" data-tab="sample">Use sample claim</div>
+          <div class="tab" data-tab="edit">Edit JSON</div>
+        </div>
+        <div id="tabEdit" class="hidden">
+          <textarea id="cf4Json" rows="14" spellcheck="false"></textarea>
+        </div>
+        <div id="tabSample">
+          <div class="hint">A complete, valid CF4 claim is pre-loaded. Switch to "Edit JSON" to customize it.</div>
+        </div>
+        <div class="btnrow">
+          <button id="btnSubmit">Submit for validation</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: results -->
+    <div>
+      <!-- Result -->
+      <div class="card">
+        <h2><span class="n">4</span> Result</h2>
+        <div class="statusline" id="resultStatus"><span class="pill info">No validation submitted yet</span></div>
+        <div class="btnrow">
+          <button class="secondary small" id="btnPoll" disabled>Poll now</button>
+          <button class="secondary small" id="btnAutoPoll" disabled>Start auto-poll</button>
+          <button class="secondary small" id="btnCopySession" disabled>Copy sessionId</button>
+        </div>
+        <div style="margin-top:12px">
+          <label>sessionId</label>
+          <input type="text" id="sessionId" readonly placeholder="—" />
+        </div>
+        <div style="margin-top:12px">
+          <label>Result JSON</label>
+          <pre id="resultJson">—</pre>
+        </div>
+      </div>
+
+      <!-- Log -->
+      <div class="card">
+        <h2><span class="n">≡</span> Request log</h2>
+        <div class="log" id="log"></div>
+        <div class="btnrow"><button class="secondary small" id="btnClearLog">Clear</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Runs entirely in your browser against the live API — just like a real 3rd-party client.
+    Your API key never leaves your machine except in the <code>x-api-key</code> header to the API.
+  </div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

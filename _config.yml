@@ -1,0 +1,21 @@
+# DocBen public documentation
+# https://docben (public docs site)
+
+title: DocBen Public Documentation
+description: CF4 Validation API integration guide, client examples, and product privacy policies.
+
+# Use the Primer theme only if you later switch README.md at the root to be the
+# homepage; we serve a hand-built index.html instead, so no theme is required.
+# theme: jekyll-theme-primer
+
+# README.md files inside subfolders (e.g. cf4-api/README.md) render as HTML pages
+# automatically via Jekyll's markdown conversion.
+markdown: GFM
+
+# Don't process the .ai-coding index artifacts (also gitignored).
+exclude:
+  - .ai-coding
+  - "**/.ai-coding/**"
+
+# Files we intentionally serve raw (download, not rendered).
+# openapi.yaml and the JSON/examples are linked directly from index.html.

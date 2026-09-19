@@ -1,0 +1,681 @@
+openapi: 3.0.3
+info:
+  title: DocBen CF4 Validation API
+  version: 1.0.0
+  description: |
+    Submit Philippine PhilHealth CF4 claims for AI-powered validation and retrieve
+    the results programmatically.
+
+    **Authentication:** every request requires an API key sent in the `x-api-key` header.
+
+    **Async model:** validation is asynchronous. Submit a claim (`POST /public/v1/validations`),
+    receive a `sessionId`, then poll `GET /public/v1/validations/{sessionId}` until the
+    status is `COMPLETED` or `FAILED`.
+
+    **Limits:** each account has a per-second rate limit, a monthly request quota, and a
+    monthly AI-token cap. Check current usage with `GET /public/v1/quota`.
+  contact:
+    name: DocBen Support
+servers:
+  - url: https://ycwpaz3big.execute-api.us-east-1.amazonaws.com/dev
+    description: Production
+tags:
+  - name: Validation
+    description: Submit and poll CF4 validations
+  - name: Quota
+    description: Account usage and limits
+  - name: Attachments
+    description: Upload supporting documents (multipart)
+
+paths:
+  /public/v1/validations:
+    post:
+      tags: [Validation]
+      summary: Submit a CF4 claim for validation
+      description: |
+        Starts an asynchronous validation. Returns `202 Accepted` with a `sessionId`
+        used to poll for the result. Attachments (optional) must be pre-uploaded via
+        the `/uploads/*` endpoints and referenced in `attachmentsMeta`.
+      operationId: submitValidation
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitValidationRequest'
+            examples:
+              noAttachments:
+                summary: Claim without attachments
+                value:
+                  message:
+                    patientFirstName: John
+                    patientLastName: Doe
+                    pin: 12-3456789-0
+                    firstCaseRateCode: PNE
+                    chiefComplaint: Fever and cough for 3 days
+                  attachmentsMeta: []
+              withAttachments:
+                summary: Claim with one attachment
+                value:
+                  message:
+                    patientFirstName: John
+                    patientLastName: Doe
+                    pin: 12-3456789-0
+                    firstCaseRateCode: PNE
+                  attachmentsMeta:
+                    - attachmentId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                      s3Key: your-client-id/your-client-id/1726660000000-a1b2c3d4.pdf
+                      fileName: cbc-result.pdf
+                      size: 102400
+                      contentType: application/pdf
+      responses:
+        '202':
+          description: Validation accepted and processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitValidationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+
+  /public/v1/validations/{sessionId}:
+    get:
+      tags: [Validation]
+      summary: Poll validation status and result
+      description: |
+        Returns the current status of a validation. You may only poll sessions that
+        belong to your account. Poll every 3–5 seconds until `status` is `COMPLETED`
+        or `FAILED`.
+      operationId: getValidation
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          description: The session id returned by `POST /validations`
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Validation status (PROCESSING, COMPLETED, or FAILED)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationStatus'
+              examples:
+                processing:
+                  summary: Still running
+                  value:
+                    sessionId: 9f2c1a7e-3d4b-4e8f-9a01-1c2d3e4f5a6b
+                    status: PROCESSING
+                    claimStatus: Validation In Progress
+                    requestedAt: '2026-09-19T08:15:00.000Z'
+                    completedAt: null
+                    error: null
+                    result: null
+                    attachments: []
+                completed:
+                  summary: Completed with issues found
+                  value:
+                    sessionId: 9f2c1a7e-3d4b-4e8f-9a01-1c2d3e4f5a6b
+                    status: COMPLETED
+                    claimStatus: Flagged
+                    requestedAt: '2026-09-19T08:15:00.000Z'
+                    completedAt: '2026-09-19T08:15:38.000Z'
+                    error: null
+                    result:
+                      qualityPercentage: 72
+                      rejectionReason:
+                        - fieldName: attachments
+                          reason: Missing required laboratory result (CBC).
+                        - fieldName: doctorsOrders
+                          reason: No doctor's order entry for 01/18/2025.
+                      drgClassification: null
+                      drgSystem: null
+                    attachments:
+                      - attachmentId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                        fileName: cbc-result.pdf
+                        size: 102400
+                        contentType: application/pdf
+                        classification:
+                          documentType: Laboratory Result
+                          philhealthAttachment: Laboratory
+                          confidence: 0.98
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /public/v1/quota:
+    get:
+      tags: [Quota]
+      summary: Get current usage and limits
+      description: Returns your account's monthly request/token usage and configured limits.
+      operationId: getQuota
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Current quota and usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuotaResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /public/v1/uploads/init:
+    post:
+      tags: [Attachments]
+      summary: Begin an attachment upload
+      description: Step 1 of the multipart upload. Returns an `uploadId`, `attachmentId`, and `s3Key`.
+      operationId: initUpload
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadInitRequest'
+      responses:
+        '200':
+          description: Upload initialized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadInitResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /public/v1/uploads/chunk:
+    put:
+      tags: [Attachments]
+      summary: Upload a file chunk
+      description: |
+        Step 2 of the multipart upload. Send the file in one or more base64-encoded
+        chunks. `partNumber` starts at 1. Keep each response's `etag` for the
+        `complete` call. Recommended chunk size is 5 MB.
+      operationId: uploadChunk
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadChunkRequest'
+      responses:
+        '200':
+          description: Chunk uploaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadChunkResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /public/v1/uploads/complete:
+    post:
+      tags: [Attachments]
+      summary: Complete an attachment upload
+      description: |
+        Step 3 of the multipart upload. Finalizes the file and returns a full
+        `attachment` metadata object to reference in `attachmentsMeta`.
+      operationId: completeUpload
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadCompleteRequest'
+      responses:
+        '200':
+          description: Upload completed; returns the attachment metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadCompleteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /public/v1/uploads/abort:
+    post:
+      tags: [Attachments]
+      summary: Abort an attachment upload
+      description: Cancels an in-progress multipart upload.
+      operationId: abortUpload
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadAbortRequest'
+      responses:
+        '200':
+          description: Upload aborted
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key issued by DocBen. Required on every request.
+
+  responses:
+    BadRequest:
+      description: Malformed request (invalid JSON, missing fields, etc.)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key / client identity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Account suspended, or attachment/session not owned by this account
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found (e.g. unknown sessionId or client)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit, monthly request quota, or monthly token cap exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            tokenCap:
+              summary: Monthly token cap exceeded
+              value:
+                message: Monthly token cap would be exceeded by this request.
+                code: monthly_token_cap
+                monthlyTokenCap: 500000
+                tokensUsed: 498000
+                estimatedTokens: 9000
+                tokensRemaining: 2000
+    ServerError:
+      description: Server error starting validation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServiceUnavailable:
+      description: Shared validation token pool temporarily low; retry later
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: The shared validation token pool is low. Please try again later.
+            code: shared_pool_low
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+          description: Machine-readable error code (when applicable)
+          enum:
+            - unauthorized
+            - unknown_client
+            - client_suspended
+            - monthly_request_quota
+            - monthly_token_cap
+            - shared_pool_low
+      required: [message]
+
+    Cf4Message:
+      type: object
+      description: |
+        The CF4 claim payload. Field names are case-sensitive. See the integration
+        guide for the full field list. Additional fields are permitted.
+      additionalProperties: true
+      example:
+        patientFirstName: John
+        patientLastName: Doe
+        patientMiddleName: A
+        pin: 12-3456789-0
+        patientBirthDate: '1980-01-15'
+        age: '45'
+        sex: male
+        membershipType: Direct Contributor
+        admitMonth: '01'
+        admitDay: '15'
+        admitYear: '2025'
+        dischargeMonth: '01'
+        dischargeDay: '20'
+        dischargeYear: '2025'
+        firstCaseRateCode: PNE
+        chiefComplaint: Fever and cough for 3 days
+        admittingDiagnosis: Community-acquired pneumonia
+        dischargeDiagnosis: Community-acquired pneumonia, resolved
+        historyPresentIllness: Patient is a 45-year-old male who presents with 3 days of fever...
+        pastMedicalHistory: Hypertension diagnosed 5 years ago...
+        symptoms: [Fever, Cough, Dyspnea]
+        physicalExam:
+          generalSurvey: [Awake and alert]
+          chest: [Rales/crackles/rhonchi]
+        doctorsOrders:
+          - date: 01/15/2025
+            action: Admit, IV fluids, CBC, chest X-ray, start ceftriaxone
+        medicines:
+          - genericName: Ceftriaxone
+            brandName: Rocephin
+            dosage: 1g IV
+            quantity: '5'
+            cost: '500.00'
+        outcome: [IMPROVED]
+
+    AttachmentMeta:
+      type: object
+      description: Attachment metadata returned by `POST /uploads/complete`
+      properties:
+        attachmentId:
+          type: string
+        s3Key:
+          type: string
+          description: Must belong to your account (prefix is your client id)
+        fileName:
+          type: string
+        size:
+          type: integer
+        contentType:
+          type: string
+      required: [attachmentId, s3Key, fileName, size, contentType]
+
+    SubmitValidationRequest:
+      type: object
+      properties:
+        message:
+          $ref: '#/components/schemas/Cf4Message'
+        attachmentsMeta:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentMeta'
+          default: []
+      required: [message]
+
+    SubmitValidationResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        sessionId:
+          type: string
+        validationStatus:
+          type: string
+          example: PROCESSING
+        validationRequestId:
+          type: string
+        storedAttachments:
+          type: array
+          items:
+            type: object
+      required: [sessionId]
+
+    RejectionReason:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        reason:
+          type: string
+
+    ValidationResult:
+      type: object
+      properties:
+        qualityPercentage:
+          type: number
+          nullable: true
+        rejectionReason:
+          type: array
+          items:
+            $ref: '#/components/schemas/RejectionReason'
+        drgClassification:
+          type: string
+          nullable: true
+        drgSystem:
+          type: string
+          nullable: true
+
+    AttachmentClassification:
+      type: object
+      properties:
+        documentType:
+          type: string
+        philhealthAttachment:
+          type: string
+        confidence:
+          type: number
+
+    ValidationAttachment:
+      type: object
+      properties:
+        attachmentId:
+          type: string
+        fileName:
+          type: string
+        size:
+          type: integer
+        contentType:
+          type: string
+        classification:
+          $ref: '#/components/schemas/AttachmentClassification'
+
+    ValidationStatus:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        status:
+          type: string
+          enum: [PROCESSING, COMPLETED, FAILED]
+        claimStatus:
+          type: string
+          nullable: true
+          description: Flagged (issues found) or No Issues Detected
+        error:
+          type: string
+          nullable: true
+        requestedAt:
+          type: string
+          format: date-time
+          nullable: true
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+        result:
+          $ref: '#/components/schemas/ValidationResult'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationAttachment'
+
+    QuotaResponse:
+      type: object
+      properties:
+        clientId:
+          type: string
+        status:
+          type: string
+          example: active
+        monthlyRequestQuota:
+          type: integer
+          nullable: true
+        requestsUsed:
+          type: integer
+        requestsRemaining:
+          type: integer
+          nullable: true
+        monthlyTokenCap:
+          type: integer
+          nullable: true
+        tokensUsed:
+          type: integer
+        tokensRemaining:
+          type: integer
+          nullable: true
+        rateLimitRps:
+          type: integer
+          nullable: true
+        cycleStartDate:
+          type: string
+          format: date
+          nullable: true
+        resetsOn:
+          type: string
+          format: date
+
+    UploadInitRequest:
+      type: object
+      properties:
+        fileName:
+          type: string
+        size:
+          type: integer
+        contentType:
+          type: string
+      required: [fileName, size]
+
+    UploadInitResponse:
+      type: object
+      properties:
+        attachmentId:
+          type: string
+        uploadId:
+          type: string
+        s3Key:
+          type: string
+        fileName:
+          type: string
+        contentType:
+          type: string
+      required: [attachmentId, uploadId, s3Key]
+
+    UploadChunkRequest:
+      type: object
+      properties:
+        uploadId:
+          type: string
+        attachmentId:
+          type: string
+        s3Key:
+          type: string
+        partNumber:
+          type: integer
+          minimum: 1
+        chunkData:
+          type: string
+          description: Base64-encoded file bytes for this part
+      required: [uploadId, attachmentId, s3Key, partNumber, chunkData]
+
+    UploadChunkResponse:
+      type: object
+      properties:
+        attachmentId:
+          type: string
+        partNumber:
+          type: integer
+        etag:
+          type: string
+
+    UploadPart:
+      type: object
+      properties:
+        partNumber:
+          type: integer
+        etag:
+          type: string
+      required: [partNumber, etag]
+
+    UploadCompleteRequest:
+      type: object
+      properties:
+        uploadId:
+          type: string
+        attachmentId:
+          type: string
+        s3Key:
+          type: string
+        fileName:
+          type: string
+        size:
+          type: integer
+        contentType:
+          type: string
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/UploadPart'
+      required: [uploadId, attachmentId, s3Key, parts]
+
+    UploadCompleteResponse:
+      type: object
+      properties:
+        attachment:
+          $ref: '#/components/schemas/AttachmentMeta'
+
+    UploadAbortRequest:
+      type: object
+      properties:
+        uploadId:
+          type: string
+        s3Key:
+          type: string
+      required: [uploadId, s3Key]
