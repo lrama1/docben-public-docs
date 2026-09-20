@@ -88,7 +88,7 @@ Your account has three independent limits. Exceeding any of them returns an erro
 
 Counters reset on the **1st of each month (UTC)**. You can check your current usage at any time with the [`GET /public/v1/quota`](#get-publicv1quota) endpoint — we recommend calling it before submitting large batches.
 
-> **Why a token cap in addition to a request quota?** A single request can consume a variable amount of AI compute (larger claims and more attachments cost more). The token cap prevents unexpectedly heavy claims from consuming your entire budget. See [Best Practices](#14-best-practices).
+> **Why a token cap in addition to a request quota?** A single request can consume a variable amount of AI compute (larger claims and more attachments cost more). The token cap prevents unexpectedly heavy claims from consuming your entire budget. See [Best Practices](#best-practices).
 
 ---
 
@@ -179,7 +179,7 @@ Submit a CF4 claim for validation.
 
 Save the `sessionId` — you need it to poll for the result.
 
-**Failure responses:** see [Error Reference](#13-error-reference).
+**Failure responses:** see [Error Reference](#error-reference).
 
 ---
 
@@ -813,7 +813,7 @@ A ready-to-import **Bruno** collection is included in the `bruno/` folder of thi
    - `sessionId` = (leave blank; set it after you submit a validation)
 4. Run the requests in order: **01 Quota** → **02 Submit Validation** → (copy the returned `sessionId` into the environment) → **03 Get Validation**.
 
-> **Postman user?** Bruno collections are plain files; you can recreate the same requests in Postman in ~2 minutes using the curl commands above. Even easier: import the [`openapi.yaml`](#13-openapi-specification) spec directly into Postman (**Import → File**) to generate the whole request collection automatically. Each request uses the `{{baseUrl}}` and `x-api-key` values.
+> **Postman user?** Bruno collections are plain files; you can recreate the same requests in Postman in ~2 minutes using the curl commands above. Even easier: import the [`openapi.yaml`](#openapi-specification) spec directly into Postman (**Import → File**) to generate the whole request collection automatically. Each request uses the `{{baseUrl}}` and `x-api-key` values.
 
 ---
 
