@@ -1,3 +1,9 @@
+---
+title: DocBen CF4 Validation API — Client Integration Guide
+description: Submit PhilHealth CF4 claims for AI-powered validation via the public API.
+permalink: /cf4-api/
+---
+
 # DocBen CF4 Validation API — Client Integration Guide
 
 Welcome! This guide shows you how to integrate your system with the **DocBen CF4 Validation API** so you can submit Philippine PhilHealth CF4 claims for AI-powered validation and retrieve the results programmatically.

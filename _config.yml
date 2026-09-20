@@ -4,18 +4,23 @@
 title: DocBen Public Documentation
 description: CF4 Validation API integration guide, client examples, and product privacy policies.
 
-# Use the Primer theme only if you later switch README.md at the root to be the
-# homepage; we serve a hand-built index.html instead, so no theme is required.
-# theme: jekyll-theme-primer
+# Jekyll theme so Markdown pages (the integration guide, etc.) render as styled
+# HTML instead of raw text. cayman is a clean docs-style theme.
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+  - jekyll-remote-theme
 
-# README.md files inside subfolders (e.g. cf4-api/README.md) render as HTML pages
-# automatically via Jekyll's markdown conversion.
 markdown: GFM
+
+# Apply the theme's default layout to all pages, including Markdown files that
+# have no front matter (Jekyll normally requires front matter to render .md).
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
 
 # Don't process the .ai-coding index artifacts (also gitignored).
 exclude:
   - .ai-coding
   - "**/.ai-coding/**"
-
-# Files we intentionally serve raw (download, not rendered).
-# openapi.yaml and the JSON/examples are linked directly from index.html.
