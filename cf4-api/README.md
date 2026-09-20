@@ -16,22 +16,22 @@ Welcome! This guide shows you how to integrate your system with the **DocBen CF4
 
 ## Table of Contents
 
-1. [Overview](#1-overview)
-2. [Getting Your API Key](#2-getting-your-api-key)
-3. [Base URL & Authentication](#3-base-url--authentication)
-4. [Quotas, Rate Limits & Token Caps](#4-quotas-rate-limits--token-caps)
-5. [The Validation Lifecycle](#5-the-validation-lifecycle)
-6. [Endpoint Reference](#6-endpoint-reference)
-7. [Handling Attachments](#7-handling-attachments)
-8. [Step-by-Step: Your First Validation](#8-step-by-step-your-first-validation)
-9. [Sample Code — JavaScript (Node.js)](#9-sample-code--javascript-nodejs)
-10. [Sample Code — TypeScript](#10-sample-code--typescript)
-11. [curl Examples](#11-curl-examples)
-12. [Bruno / Postman Collection](#12-bruno--postman-collection)
-13. [OpenAPI Specification](#13-openapi-specification)
-14. [Error Reference](#14-error-reference)
-15. [Best Practices](#15-best-practices)
-16. [FAQ](#16-faq)
+1. [Overview](#overview)
+2. [Getting Your API Key](#getting-your-api-key)
+3. [Base URL & Authentication](#base-url-amp-authentication)
+4. [Quotas, Rate Limits & Token Caps](#quotas-rate-limits-amp-token-caps)
+5. [The Validation Lifecycle](#the-validation-lifecycle)
+6. [Endpoint Reference](#endpoint-reference)
+7. [Handling Attachments](#handling-attachments)
+8. [Step-by-Step: Your First Validation](#step-by-step-your-first-validation)
+9. [Sample Code — JavaScript (Node.js)](#sample-code--javascript-nodejs)
+10. [Sample Code — TypeScript](#sample-code--typescript)
+11. [curl Examples](#curl-examples)
+12. [Bruno / Postman Collection](#bruno--postman-collection)
+13. [OpenAPI Specification](#openapi-specification)
+14. [Error Reference](#error-reference)
+15. [Best Practices](#best-practices)
+16. [FAQ](#faq)
 
 ---
 

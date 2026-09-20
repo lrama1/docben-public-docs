@@ -1,0 +1,35 @@
+<!-- Custom head content injected into the cayman theme's default layout. -->
+
+<!-- Mermaid: render ```mermaid fenced code blocks as diagrams. Jekyll/kramdown
+     emits them as <pre><code class="language-mermaid">; we convert those blocks
+     into mermaid source and initialize the library. -->
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+  mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' });
+
+  function renderMermaid() {
+    // kramdown/GFM may emit the diagram as <code class="language-mermaid"> or
+    // as a <pre> whose text is the mermaid source.
+    const blocks = document.querySelectorAll('code.language-mermaid, pre.language-mermaid, pre > code.language-mermaid');
+    blocks.forEach((codeEl, i) => {
+      const pre = codeEl.closest('pre') || codeEl;
+      const source = codeEl.textContent;
+      const div = document.createElement('div');
+      div.className = 'mermaid';
+      div.textContent = source;
+      pre.replaceWith(div);
+    });
+    try {
+      mermaid.run({ querySelector: '.mermaid' });
+    } catch (e) {
+      console.error('mermaid render failed', e);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderMermaid);
+  } else {
+    renderMermaid();
+  }
+</script>
