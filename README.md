@@ -25,3 +25,5 @@ client and are never stored here.
 To serve via GitHub Pages: enable **Settings → Pages → Deploy from branch**,
 choose the default branch and the repository root. The included `_config.yml`
 and `index.html` are all that's needed.
+
+<!-- build nudge: re-trigger GitHub Pages DNS check for docs.docbenai.com -->
