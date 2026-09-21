@@ -303,7 +303,7 @@ Content-Type: application/xml
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ECLAIMS SYSTEM "eClaims3.0.dtd">
-<ECLAIMS pUserName="..." pPassword="..." pHospitalCode="..." pSoftwareCertId="...">
+<ECLAIMS pUserName="" pPassword="" pHospitalCode="HCP-001" pSoftwareCertId="">
   <CLAIM pClaimNumber="CLM2026001" pTrackingNumber="TRK-001" pIsFinal="Y">
     <CF1 ... />
     <CF2 ...>...</CF2>
@@ -312,6 +312,8 @@ Content-Type: application/xml
   </CLAIM>
 </ECLAIMS>
 ```
+
+> The `pUserName`/`pPassword`/`pSoftwareCertId` attributes are left blank — they are PhilHealth-internal and **not** required (or used) by DocBen.
 
 The response is the usual `202 Accepted` with a `sessionId` you poll as normal.
 
@@ -328,10 +330,13 @@ The response is the usual `202 Accepted` with a `sessionId` you poll as normal.
 
 ### Validation behavior specific to XML claims
 
+> **🔒 You do NOT need to send your PhilHealth credentials.**
+> The `pUserName` / `pPassword` / `pSoftwareCertId` attributes on the `<ECLAIMS>` root are **completely ignored** by this API. Authentication is handled solely by your DocBen **API key** (`x-api-key` header). Those attributes exist for PhilHealth's *internal* eClaims authentication — leave them blank (or placeholder) when submitting to DocBen. They are never validated and never sent to the model.
+
 - **Symptoms are derived** from the chief complaint + HPI narrative (the DTD has no structured symptoms field). This is negation-aware — "no fever" / "denies chest pain" are not counted as that symptom.
 - **Physical exam** free text is mapped to named sections where possible; if it can't be sectioned, the LLM judges the narrative directly (deterministic section checks are skipped).
 - **`doctorsOrders` daily-coverage check does not apply** to XML claims (the DTD has no doctorsOrders field).
-- **Credentials** on the `<ECLAIMS>` root (`pUserName`/`pPassword`/`pSoftwareCertId`) are **not** used for authentication — the `x-api-key` is authoritative. `pHospitalCode` is only a soft sanity check. Credentials are never sent to the model.
+- **`pHospitalCode`** on the `<ECLAIMS>` root is only a soft sanity check, not authentication.
 
 ### Attachments in XML
 
