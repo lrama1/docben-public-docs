@@ -22,16 +22,17 @@ Welcome! This guide shows you how to integrate your system with the **DocBen CF4
 4. [Quotas, Rate Limits & Token Caps](#quotas-rate-limits-amp-token-caps)
 5. [The Validation Lifecycle](#the-validation-lifecycle)
 6. [Endpoint Reference](#endpoint-reference)
-7. [Handling Attachments](#handling-attachments)
-8. [Step-by-Step: Your First Validation](#step-by-step-your-first-validation)
-9. [Sample Code — JavaScript (Node.js)](#sample-code--javascript-nodejs)
-10. [Sample Code — TypeScript](#sample-code--typescript)
-11. [curl Examples](#curl-examples)
-12. [Bruno / Postman Collection](#bruno--postman-collection)
-13. [OpenAPI Specification](#openapi-specification)
-14. [Error Reference](#error-reference)
-15. [Best Practices](#best-practices)
-16. [FAQ](#faq)
+7. [Submitting as eClaims 3.0 XML](#submitting-as-eclaims-30-xml)
+8. [Handling Attachments](#handling-attachments)
+9. [Step-by-Step: Your First Validation](#step-by-step-your-first-validation)
+10. [Sample Code — JavaScript (Node.js)](#sample-code--javascript-nodejs)
+11. [Sample Code — TypeScript](#sample-code--typescript)
+12. [curl Examples](#curl-examples)
+13. [Bruno / Postman Collection](#bruno--postman-collection)
+14. [OpenAPI Specification](#openapi-specification)
+15. [Error Reference](#error-reference)
+16. [Best Practices](#best-practices)
+17. [FAQ](#faq)
 
 ---
 
@@ -43,7 +44,12 @@ The DocBen CF4 Validation API lets you submit a CF4 claim (patient info, history
 - a list of **rejection reasons** (issues that would cause PhilHealth to deny the claim), and
 - optional **DRG classification**.
 
-Validation is **asynchronous**: you submit a claim, receive a `sessionId`, then poll for the result. A typical validation completes in **10–60 seconds** depending on the number of attachments.
+**Two ways to submit a claim:**
+
+1. **JSON (DocBen proprietary format)** — a structured JSON payload describing the claim (see [CF4 Payload Fields](#cf4-payload-fields)).
+2. **XML (official PhilHealth eClaims 3.0)** — send the standard eClaims 3.0 XML document and the API translates it to the internal format before validating. See [Submitting as eClaims 3.0 XML](#submitting-as-eclaims-30-xml).
+
+Validation is **asynchronous**: you submit a claim, receive a `sessionId`, then poll for the result. A typical validation completes in **10–60 seconds** depending on the number of attachments (longer when attachments require OCR/classification).
 
 ---
 
@@ -141,9 +147,12 @@ All endpoints are under the `/public/v1` prefix.
 
 ### POST /public/v1/validations
 
-Submit a CF4 claim for validation.
+Submit a CF4 claim for validation. You can submit in **either** of two formats:
 
-**Request body:**
+- **JSON** (`Content-Type: application/json`) — the DocBen proprietary payload.
+- **XML** (`Content-Type: application/xml`) — an official PhilHealth eClaims 3.0 document.
+
+**JSON request body:**
 
 ```json
 {
@@ -162,8 +171,10 @@ Submit a CF4 claim for validation.
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `message` | object | ✅ | The CF4 claim payload (see [CF4 payload](#cf4-payload-fields)). |
+| `message` | object | ✅ (JSON) | The CF4 claim payload (see [CF4 payload](#cf4-payload-fields)). |
 | `attachmentsMeta` | array | ➖ | Metadata for attachments previously uploaded via `/uploads/*`. Omit for no attachments. |
+
+**XML request body:** the raw eClaims 3.0 document as the request body, with header `Content-Type: application/xml`. Attachments are embedded in the XML as base64 `<DOCUMENT>` entries (see [Submitting as eClaims 3.0 XML](#submitting-as-eclaims-30-xml)).
 
 **Success — `202 Accepted`:**
 
@@ -270,7 +281,94 @@ Returns your current monthly usage and limits.
 
 ---
 
-## 7. Handling Attachments
+## 7. Submitting as eClaims 3.0 XML
+
+Instead of the proprietary JSON payload, you can submit a claim as an **official PhilHealth eClaims 3.0 XML document**. The API parses the XML, translates it to the internal format, and runs the same validation pipeline. The response (status, quality, rejections, DRG) is identical to a JSON submission.
+
+### How to submit XML
+
+Send the raw XML as the request body with `Content-Type: application/xml`:
+
+```bash
+curl -X POST "https://api.docbenai.com/public/v1/validations" \
+  -H "x-api-key: $KEY" \
+  -H "Content-Type: application/xml" \
+  --data-binary @claim.xml
+```
+
+```http
+POST /public/v1/validations HTTP/1.1
+x-api-key: YOUR_API_KEY_HERE
+Content-Type: application/xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ECLAIMS SYSTEM "eClaims3.0.dtd">
+<ECLAIMS pUserName="..." pPassword="..." pHospitalCode="..." pSoftwareCertId="...">
+  <CLAIM pClaimNumber="CLM2026001" pTrackingNumber="TRK-001" pIsFinal="Y">
+    <CF1 ... />
+    <CF2 ...>...</CF2>
+    <CF4 ...>...</CF4>
+    <ESOA ...>...</ESOA>
+  </CLAIM>
+</ECLAIMS>
+```
+
+The response is the usual `202 Accepted` with a `sessionId` you poll as normal.
+
+### What gets mapped (eClaims 3.0 → internal format)
+
+| eClaims 3.0 element | How it's used |
+|---|---|
+| `CF1` (member & patient) | Patient = clinical subject; member recorded for billing context. Dependents (`pPatientType="D"`) handled. |
+| `CF2` (admission, discharge, diagnoses, procedures, physicians) | Admit/discharge dates (ISO) & times (24h) split into internal parts; case-rate codes; diagnoses; procedures & physician fees stored. |
+| `CF3` (maternity) | Obstetric data (gestation, delivery, gravida/para) stored. |
+| `CF4` (clinical summary, vitals, medications) | Chief complaint, HPI, physical exam narrative, vital signs, medicines. |
+| `ESOA` + `ITEMIZED_CHARGES` | Billing/charges stored (not validated in v1). |
+| `ATTACHMENTS` / `DOCUMENT` | Base64 documents decoded and uploaded as attachments (see below). |
+
+### Validation behavior specific to XML claims
+
+- **Symptoms are derived** from the chief complaint + HPI narrative (the DTD has no structured symptoms field). This is negation-aware — "no fever" / "denies chest pain" are not counted as that symptom.
+- **Physical exam** free text is mapped to named sections where possible; if it can't be sectioned, the LLM judges the narrative directly (deterministic section checks are skipped).
+- **`doctorsOrders` daily-coverage check does not apply** to XML claims (the DTD has no doctorsOrders field).
+- **Credentials** on the `<ECLAIMS>` root (`pUserName`/`pPassword`/`pSoftwareCertId`) are **not** used for authentication — the `x-api-key` is authoritative. `pHospitalCode` is only a soft sanity check. Credentials are never sent to the model.
+
+### Attachments in XML
+
+Embed documents as base64 inside the XML:
+
+```xml
+<ATTACHMENTS>
+  <DOCUMENT pDocType="LAB_RESULT"
+            pFileName="CBC_Result.pdf"
+            pMimeType="application/pdf"
+            pBase64Data="JVBERi0xLjQKJeLjz9MKMyAwIG9iago..." />
+</ATTACHMENTS>
+```
+
+- They are decoded, uploaded as attachments, and classified/validated like any other attachment.
+- **Size limit:** the combined base64 payload is capped (~6 MB) because API Gateway caps requests at 10 MB. For larger files, use the [chunked-upload endpoints](#handling-attachments) instead and submit via JSON, or keep XML attachments small.
+- `pDocType` values: `CSF`, `LAB_RESULT`, `OPERATIVE_TECH`, `OTHER`.
+
+### XML validation errors
+
+A malformed or non-eClaims document returns `400` with a specific reason so you can fix the payload:
+
+```json
+{
+  "message": "Invalid eClaims document: CF1.pMemberPIN is required; CLAIM.ESOA is required",
+  "code": "invalid_eclaims",
+  "errors": ["CF1.pMemberPIN is required", "CLAIM.ESOA is required"]
+}
+```
+
+Common codes: `malformed_xml`, `not_eclaims`, `invalid_eclaims`, `attachment_too_large`.
+
+> **Note on the eClaims 3.0 DTD:** the XML feature follows the eClaims 3.0 schema (`ECLAIMS/CF1/CF2/CF3/CF4/ESOA/ATTACHMENTS`). Confirm the exact DTD version and attachment mechanism against PhilHealth's current certification documentation for your integration.
+
+---
+
+## 8. Handling Attachments
 
 Supporting documents (lab results, X-rays, operative records, etc.) are validated alongside the claim. Because files can be large, **you upload them first**, then reference them in the validation request. Files never travel inside the `POST /validations` body.
 
@@ -360,7 +458,7 @@ If you need to cancel an in-progress upload:
 
 ---
 
-## 8. Step-by-Step: Your First Validation
+## 9. Step-by-Step: Your First Validation
 
 **Step 0 — (optional) Check your quota**
 
@@ -397,7 +495,7 @@ On `COMPLETED`, inspect `result.qualityPercentage` and `result.rejectionReason`.
 
 ---
 
-## 9. Sample Code — JavaScript (Node.js)
+## 10. Sample Code — JavaScript (Node.js)
 
 A complete, dependency-free client using Node 18+'s built-in `fetch`. Save as `docbenClient.js`.
 
@@ -534,9 +632,19 @@ export DOCBEN_API_KEY="your-api-key"          # Windows PowerShell: $env:DOCBEN_
 node docbenClient.js
 ```
 
+**Submitting an eClaims 3.0 XML document instead:**
+
+```js
+const xml = fs.readFileSync('./claim.xml', 'utf8');
+const submitted = await submitValidationXml(xml);   // posts with Content-Type: application/xml
+const result = await waitForResult(submitted.sessionId);
+```
+
+The full `submitValidationXml(xmlString)` function is included in [`examples/docbenClient.js`](examples/docbenClient.js). It is identical to `submitValidation` except it sends the raw XML string with the `application/xml` content type.
+
 ---
 
-## 10. Sample Code — TypeScript
+## 11. Sample Code — TypeScript
 
 The same client with full types. Save as `docbenClient.ts`. Works with `ts-node` or compiled with `tsc` (Node 18+ / `lib: ES2022`, `moduleResolution: node`).
 
@@ -729,9 +837,19 @@ main().catch((err) => {
 });
 ```
 
+**Submitting an eClaims 3.0 XML document instead:**
+
+```ts
+const xml = fs.readFileSync('./claim.xml', 'utf8');
+const submitted = await submitValidationXml(xml);   // posts with Content-Type: application/xml
+const result = await waitForResult(submitted.sessionId);
+```
+
+The full typed `submitValidationXml(xmlString: string): Promise<SubmitResponse>` is included in [`examples/docbenClient.ts`](examples/docbenClient.ts).
+
 ---
 
-## 11. curl Examples
+## 12. curl Examples
 
 Set these once (adjust for your shell):
 
@@ -769,6 +887,20 @@ curl -s -X POST "$BASE/public/v1/validations" \
 > curl -X POST "$BASE/public/v1/validations" -H "x-api-key: $KEY" -H "Content-Type: application/json" -d $body
 > ```
 
+**Submit a validation as eClaims 3.0 XML** (with the document in `claim.xml`):
+
+```bash
+curl -s -X POST "$BASE/public/v1/validations" \
+  -H "x-api-key: $KEY" \
+  -H "Content-Type: application/xml" \
+  --data-binary @claim.xml
+```
+
+> Windows/PowerShell:
+> ```powershell
+> curl.exe -X POST "$BASE/public/v1/validations" -H "x-api-key: $KEY" -H "Content-Type: application/xml" --data-binary "@claim.xml"
+> ```
+
 **Poll the result** (replace `SESSION_ID`):
 
 ```bash
@@ -801,7 +933,7 @@ curl -s -X POST "$BASE/public/v1/uploads/complete" \
 
 ---
 
-## 12. Bruno / Postman Collection
+## 13. Bruno / Postman Collection
 
 A ready-to-import **Bruno** collection is included in the `bruno/` folder of this package. To use it:
 
@@ -813,11 +945,13 @@ A ready-to-import **Bruno** collection is included in the `bruno/` folder of thi
    - `sessionId` = (leave blank; set it after you submit a validation)
 4. Run the requests in order: **01 Quota** → **02 Submit Validation** → (copy the returned `sessionId` into the environment) → **03 Get Validation**.
 
+The collection also includes **02b – Submit Validation (eClaims 3.0 XML)**, which submits a raw PhilHealth eClaims 3.0 XML document (`Content-Type: application/xml`) instead of JSON. Use it as the starting point for XML integrations — replace the sample XML body with your own document.
+
 > **Postman user?** Bruno collections are plain files; you can recreate the same requests in Postman in ~2 minutes using the curl commands above. Even easier: import the [`openapi.yaml`](#openapi-specification) spec directly into Postman (**Import → File**) to generate the whole request collection automatically. Each request uses the `{{baseUrl}}` and `x-api-key` values.
 
 ---
 
-## 13. OpenAPI Specification
+## 14. OpenAPI Specification
 
 A machine-readable **OpenAPI 3.0** definition of the entire API is provided in [`openapi.yaml`](openapi.yaml). Use it to:
 
@@ -836,7 +970,7 @@ The spec documents every endpoint, request/response schema, authentication, and 
 
 ---
 
-## 14. Error Reference
+## 15. Error Reference
 
 Errors return a JSON body with a `message` and, where applicable, a machine-readable `code`.
 
@@ -868,7 +1002,7 @@ Errors return a JSON body with a `message` and, where applicable, a machine-read
 
 ---
 
-## 15. Best Practices
+## 16. Best Practices
 
 1. **Poll politely.** Poll every 3–5 seconds and stop after ~3 minutes. Do not poll in a tight loop — you will hit your rate limit.
 2. **Check quota before batches.** Call `GET /quota` and ensure `requestsRemaining` and `tokensRemaining` cover your planned submissions.
@@ -877,10 +1011,11 @@ Errors return a JSON body with a `message` and, where applicable, a machine-read
 5. **Keep attachments reasonable.** More/larger attachments increase token usage and validation time. Upload only what PhilHealth requires.
 6. **Secure your key.** Store it in a secrets manager or environment variable. Rotate it if there's any chance of exposure.
 7. **Log `sessionId`.** Keep the `sessionId` with each submission so you can correlate results and troubleshoot with DocBen support.
+8. **For XML submissions,** validate your document against the eClaims 3.0 DTD *before* sending (you'll get a precise `400` with the failing element otherwise), and keep embedded base64 attachments small — push large files through the chunked-upload endpoints instead.
 
 ---
 
-## 16. FAQ
+## 17. FAQ
 
 **Q: Is validation synchronous?**
 No. Submit returns `202` immediately; poll `GET /validations/{sessionId}` for the result (usually 10–60s).
@@ -899,6 +1034,15 @@ Check the `error` field in the poll response. Common causes include a malformed 
 
 **Q: Can I test without affecting my quota?**
 Every validation consumes quota and tokens. We recommend testing with a small number of claims first. There is currently no separate sandbox environment.
+
+**Q: Can I submit a claim as PhilHealth eClaims 3.0 XML instead of JSON?**
+Yes. POST the raw XML with `Content-Type: application/xml` — the API translates it to the internal format and validates it identically. See [Submitting as eClaims 3.0 XML](#submitting-as-eclaims-30-xml).
+
+**Q: Are eClaims 3.0 attachments sent as base64 inside the XML?**
+Per the eClaims 3.0 DTD this feature follows, attachments are embedded as base64 `<DOCUMENT>` entries. They are decoded and validated like any other attachment, subject to the ~6 MB combined inline limit. For larger files, use the chunked-upload endpoints (JSON path). Confirm the exact attachment mechanism against PhilHealth's current certification documentation.
+
+**Q: Which format should I use — JSON or XML?**
+Use **XML** if your system already produces PhilHealth eClaims 3.0 documents (least transformation). Use **JSON** if you're building claims natively against our API or need fine-grained control (structured physical exam, doctors orders, attachments via chunked upload). Both reach the same validation pipeline and produce the same result shape.
 
 ---
 

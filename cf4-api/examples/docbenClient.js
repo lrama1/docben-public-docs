@@ -76,6 +76,28 @@ async function submitValidation(cf4Message, attachmentsMeta = []) {
   return request('POST', '/public/v1/validations', { message: cf4Message, attachmentsMeta });
 }
 
+// ── Submit validation as eClaims 3.0 XML ──────────────────────
+// Send a raw PhilHealth eClaims 3.0 document. Attachments may be embedded as
+// base64 <ATTACHMENTS><DOCUMENT> entries (~6 MB combined inline limit).
+async function submitValidationXml(xmlString) {
+  const res = await fetch(`${BASE_URL}/public/v1/validations`, {
+    method: 'POST',
+    headers: { 'x-api-key': API_KEY, 'Content-Type': 'application/xml' },
+    body: xmlString,
+  });
+  const text = await res.text();
+  let data;
+  try { data = text ? JSON.parse(text) : {}; } catch { data = { raw: text }; }
+  if (!res.ok) {
+    const err = new Error(data.message || `HTTP ${res.status}`);
+    err.status = res.status;
+    err.code = data.code;
+    err.body = data;
+    throw err;
+  }
+  return data;
+}
+
 // ── Poll for result ───────────────────────────────────────────
 function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
@@ -116,4 +138,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { getQuota, uploadAttachment, submitValidation, waitForResult };
+module.exports = { getQuota, uploadAttachment, submitValidation, submitValidationXml, waitForResult };

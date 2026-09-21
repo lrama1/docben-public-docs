@@ -141,6 +141,27 @@ export async function submitValidation(
   return request<SubmitResponse>('POST', '/public/v1/validations', { message, attachmentsMeta });
 }
 
+/**
+ * Submit a validation as a raw PhilHealth eClaims 3.0 XML document.
+ * Attachments may be embedded as base64 <ATTACHMENTS><DOCUMENT> entries
+ * (~6 MB combined inline limit).
+ */
+export async function submitValidationXml(xmlString: string): Promise<SubmitResponse> {
+  const xmlHeaders: Record<string, string> = { 'x-api-key': API_KEY as string, 'Content-Type': 'application/xml' };
+  const res = await fetch(`${BASE_URL}/public/v1/validations`, {
+    method: 'POST',
+    headers: xmlHeaders,
+    body: xmlString,
+  });
+  const text = await res.text();
+  let data: any;
+  try { data = text ? JSON.parse(text) : {}; } catch { data = { raw: text }; }
+  if (!res.ok) {
+    throw new DocbenApiError(data.message ?? `HTTP ${res.status}`, res.status, data.code, data);
+  }
+  return data as SubmitResponse;
+}
+
 export async function getValidation(sessionId: string): Promise<ValidationStatus> {
   return request<ValidationStatus>('GET', `/public/v1/validations/${sessionId}`);
 }

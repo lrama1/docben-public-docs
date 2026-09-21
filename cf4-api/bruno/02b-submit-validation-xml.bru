@@ -1,0 +1,40 @@
+meta {
+  name: 02b - Submit Validation (eClaims 3.0 XML)
+  type: http
+  seq: 2.5
+}
+
+post {
+  url: {{baseUrl}}/public/v1/validations
+  body: xml
+  auth: none
+}
+
+headers {
+  Content-Type: application/xml
+}
+
+body:xml {
+  <?xml version="1.0" encoding="UTF-8"?>
+  <ECLAIMS>
+    <HEADER pUserName="your-eclaims-user" pPassword="your-eclaims-pass" pHospitalCode="HCP-001" pSoftwareCertificationId="SC-001"/>
+    <CF1 pPIN="12-3456789-0" pMemberLastName="Doe" pMemberFirstName="John" pMemberMiddleName="A" pMemberSuffix="" pMemberBirthDate="1980-01-15" pMemberGender="M" pPatientIs="M" pPatientLastName="Doe" pPatientFirstName="John" pPatientMiddleName="A" pPatientSuffix="" pPatientBirthDate="1980-01-15" pPatientGender="M"/>
+    <CF2 pAccreditationCode="H12345" pAdmissionDateTime="2025-01-15 10:30" pDischargeDateTime="2025-01-20 14:00" pDischargeDisposition="I" pChiefComplaint="Fever and cough for 3 days" pAdmittingDiagnosis="Community-acquired pneumonia" pDischargeDiagnosis="Community-acquired pneumonia, resolved"/>
+    <CF4 pHistoryPresentIllness="45-year-old male, 3 days of fever and productive cough." pPhysicalExamination="Awake and alert. Chest with rales/crackles on the right lower lobe. No cyanosis." pCourseInWard="Started on IV ceftriaxone, afebrile by day 4." pDoctorOrderAction="Admit, IV fluids, CBC, chest X-ray, start ceftriaxone"/>
+    <ESOA pICDCode="J15.9" pRVSCode="" pCaseRateCode="PNE" pCaseRateAmount="0.00"/>
+  </ECLAIMS>
+}
+
+script:post-response {
+  // Capture sessionId for the polling request.
+  if (res.body && res.body.sessionId) {
+    bru.setEnvVar("sessionId", res.body.sessionId);
+  }
+}
+
+docs {
+  Submit a claim as a raw PhilHealth eClaims 3.0 XML document.
+  This request overrides the collection's default JSON Content-Type with
+  application/xml via the `body: xml` type. The API auto-detects the format,
+  translates the XML to the internal CF4 format, and validates identically.
+}

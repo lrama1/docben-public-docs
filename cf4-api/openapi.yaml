@@ -34,14 +34,43 @@ paths:
       summary: Submit a CF4 claim for validation
       description: |
         Starts an asynchronous validation. Returns `202 Accepted` with a `sessionId`
-        used to poll for the result. Attachments (optional) must be pre-uploaded via
-        the `/uploads/*` endpoints and referenced in `attachmentsMeta`.
+        used to poll for the result.
+
+        **Two input formats are supported:**
+        - `application/json` — the DocBen CF4 JSON format (`message` + optional
+          `attachmentsMeta`). Attachments must be pre-uploaded via `/uploads/*`.
+        - `application/xml` — a raw **PhilHealth eClaims 3.0 XML** document
+          (`<ECLAIMS>` root), sent as the raw body. The API translates it to the
+          internal format and validates identically. Embedded `<ATTACHMENTS><DOCUMENT>`
+          entries are decoded and validated (≈6 MB combined inline limit).
+
+        Format is auto-detected from the `Content-Type` header (and, for XML, an
+        `<?xml`/`<ECLAIMS` body). Response shape is the same for both.
       operationId: submitValidation
       security:
         - ApiKeyAuth: []
       requestBody:
         required: true
         content:
+          application/xml:
+            schema:
+              type: string
+              description: |
+                A raw PhilHealth eClaims 3.0 XML document (`<?xml version="1.0" encoding="UTF-8"?>`
+                followed by an `<ECLAIMS>` root containing `CF1`, `CF2`, `CF3?`, `CF4`,
+                `ESOA`, and optional `<ATTACHMENTS>`).
+            examples:
+              eclaims3:
+                summary: eClaims 3.0 XML (abridged)
+                value: |
+                  <?xml version="1.0" encoding="UTF-8"?>
+                  <ECLAIMS>
+                    <HEADER pUserName="user" pPassword="pass" pHospitalCode="HCP-001" pSoftwareCertificationId="SC-001"/>
+                    <CF1 pPIN="12-3456789-0" .../>
+                    <CF2 .../>
+                    <CF4 .../>
+                    <ESOA .../>
+                  </ECLAIMS>
           application/json:
             schema:
               $ref: '#/components/schemas/SubmitValidationRequest'
