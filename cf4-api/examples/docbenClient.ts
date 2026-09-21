@@ -6,7 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const BASE_URL = process.env.DOCBEN_BASE_URL ?? 'https://ycwpaz3big.execute-api.us-east-1.amazonaws.com/dev';
+const BASE_URL = process.env.DOCBEN_BASE_URL ?? 'https://api.docbenai.com';
 const API_KEY = process.env.DOCBEN_API_KEY;
 const CHUNK_SIZE = 5 * 1024 * 1024;
 

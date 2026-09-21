@@ -11,7 +11,7 @@
 (() => {
   'use strict';
 
-  const DEFAULT_BASE = 'https://ycwpaz3big.execute-api.us-east-1.amazonaws.com/dev';
+  const DEFAULT_BASE = 'https://api.docbenai.com';
   const CHUNK_SIZE = 5 * 1024 * 1024; // 5 MB, matching the docs
 
   const $ = (id) => document.getElementById(id);

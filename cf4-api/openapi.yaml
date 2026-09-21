@@ -17,7 +17,7 @@ info:
   contact:
     name: DocBen Support
 servers:
-  - url: https://ycwpaz3big.execute-api.us-east-1.amazonaws.com/dev
+  - url: https://api.docbenai.com
     description: Production
 tags:
   - name: Validation

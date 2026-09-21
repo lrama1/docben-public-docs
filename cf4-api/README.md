@@ -63,10 +63,10 @@ API keys are issued by DocBen. Contact your DocBen account manager to request a 
 **Base URL:**
 
 ```
-https://ycwpaz3big.execute-api.us-east-1.amazonaws.com/dev
+https://api.docbenai.com
 ```
 
-All endpoints are relative to this base. Send your API key on **every request** in the `x-api-key` header:
+All endpoints are relative to this base (for example, `POST https://api.docbenai.com/public/v1/validations`). Send your API key on **every request** in the `x-api-key` header:
 
 ```
 x-api-key: YOUR_API_KEY_HERE
@@ -410,7 +410,7 @@ A complete, dependency-free client using Node 18+'s built-in `fetch`. Save as `d
 const fs = require('fs');
 const path = require('path');
 
-const BASE_URL = process.env.DOCBEN_BASE_URL || 'https://ycwpaz3big.execute-api.us-east-1.amazonaws.com/dev';
+const BASE_URL = process.env.DOCBEN_BASE_URL || 'https://api.docbenai.com';
 const API_KEY = process.env.DOCBEN_API_KEY; // set this env var — never hardcode your key
 const CHUNK_SIZE = 5 * 1024 * 1024; // 5 MB
 
@@ -548,7 +548,7 @@ The same client with full types. Save as `docbenClient.ts`. Works with `ts-node`
 import fs from 'fs';
 import path from 'path';
 
-const BASE_URL = process.env.DOCBEN_BASE_URL ?? 'https://ycwpaz3big.execute-api.us-east-1.amazonaws.com/dev';
+const BASE_URL = process.env.DOCBEN_BASE_URL ?? 'https://api.docbenai.com';
 const API_KEY = process.env.DOCBEN_API_KEY;
 const CHUNK_SIZE = 5 * 1024 * 1024;
 
@@ -737,13 +737,13 @@ Set these once (adjust for your shell):
 
 ```bash
 # bash
-export BASE="https://ycwpaz3big.execute-api.us-east-1.amazonaws.com/dev"
+export BASE="https://api.docbenai.com"
 export KEY="your-api-key"
 ```
 
 ```powershell
 # PowerShell
-$BASE = "https://ycwpaz3big.execute-api.us-east-1.amazonaws.com/dev"
+$BASE = "https://api.docbenai.com"
 $KEY  = "your-api-key"
 ```
 
@@ -808,7 +808,7 @@ A ready-to-import **Bruno** collection is included in the `bruno/` folder of thi
 1. Install [Bruno](https://www.usebruno.com/) (free, offline API client).
 2. Open Bruno → **Open Collection** → select the `bruno/` folder.
 3. Open the collection's **Environments → local** and set:
-   - `baseUrl` = `https://ycwpaz3big.execute-api.us-east-1.amazonaws.com/dev`
+   - `baseUrl` = `https://api.docbenai.com`
    - `apiKey` = your API key
    - `sessionId` = (leave blank; set it after you submit a validation)
 4. Run the requests in order: **01 Quota** → **02 Submit Validation** → (copy the returned `sessionId` into the environment) → **03 Get Validation**.
