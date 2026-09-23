@@ -172,8 +172,9 @@ paths:
                           reason: Missing required laboratory result (CBC).
                         - fieldName: doctorsOrders
                           reason: No doctor's order entry for 01/18/2025.
-                      drgClassification: null
-                      drgSystem: null
+                      drgClassification: '04523'
+                      drgClassificationDesc: Respiratory infection/inflammation, w severe CC
+                      drgSystem: TDRGv5
                     attachments:
                       - attachmentId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
                         fileName: cbc-result.pdf
@@ -518,9 +519,15 @@ components:
         drgClassification:
           type: string
           nullable: true
+          description: PhilHealth DRG code (Thai DRG v5), e.g. `04523`. Computed deterministically by the DRG grouper.
+        drgClassificationDesc:
+          type: string
+          nullable: true
+          description: Official PhilHealth description of drgClassification, from the grouper's code table.
         drgSystem:
           type: string
           nullable: true
+          description: '`TDRGv5` when a DRG was assigned, else null.'
 
     AttachmentClassification:
       type: object

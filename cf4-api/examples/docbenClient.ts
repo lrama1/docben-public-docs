@@ -34,6 +34,7 @@ export interface ValidationResult {
   qualityPercentage: number | null;
   rejectionReason: RejectionReason[];
   drgClassification: string | null;
+  drgClassificationDesc: string | null;
   drgSystem: string | null;
 }
 
@@ -197,6 +198,7 @@ async function main(): Promise<void> {
   const result = await waitForResult(submitted.sessionId);
   console.log('Status:', result.status, '| claimStatus:', result.claimStatus);
   console.log('Quality:', result.result?.qualityPercentage);
+  console.log('DRG:', result.result?.drgClassification, '-', result.result?.drgClassificationDesc);
   console.log('Rejections:', result.result?.rejectionReason);
 }
 

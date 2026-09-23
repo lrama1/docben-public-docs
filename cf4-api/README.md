@@ -227,8 +227,9 @@ Poll the status and result of a validation. You may only poll sessions that belo
       { "fieldName": "attachments", "reason": "Missing required laboratory result (CBC)." },
       { "fieldName": "doctorsOrders", "reason": "No doctor's order entry for 01/18/2025." }
     ],
-    "drgClassification": null,
-    "drgSystem": null
+    "drgClassification": "04523",
+    "drgClassificationDesc": "Respiratory infection/inflammation, w severe CC",
+    "drgSystem": "TDRGv5"
   },
   "attachments": [
     {
@@ -252,8 +253,19 @@ Poll the status and result of a validation. You may only poll sessions that belo
 |---|---|---|
 | `result.qualityPercentage` | number | 0–100 quality score. |
 | `result.rejectionReason` | array | Issues found. Empty array = no issues. Each item has `fieldName` and `reason`. |
-| `result.drgClassification` | string/null | DRG classification when available. |
+| `result.drgClassification` | string/null | The PhilHealth DRG code (Thai DRG v5), e.g. `04523`. See [How DRG is assigned](#how-drg-is-assigned). |
+| `result.drgClassificationDesc` | string/null | The official PhilHealth description of `drgClassification`, from the DRG grouper's own code table. Always matches the code. |
+| `result.drgSystem` | string/null | `TDRGv5` when a DRG was assigned, else `null`. |
 | `claimStatus` | string | `Flagged` (issues found) or `No Issues Detected`. |
+
+### How DRG is assigned
+
+The DRG is computed by a **deterministic PhilHealth DRG grouper** (Thai DRG v5), not by the LLM — so the same claim always yields the same code. The grouper follows the official algorithm: it derives the **MDC** (Major Diagnostic Category) from the primary diagnosis, refines to a **DC** (Disease Cluster) using the procedure codes and diagnoses, then stratifies by the **CC** (complication/comorbidity) severity level to produce the final 5-digit DRG.
+
+- **XML submissions** carry structured ICD-10 and RVS/ICD-9 procedure codes, so the grouper runs directly on them (most accurate).
+- **JSON submissions** are free-text; the API first extracts the primary/secondary diagnoses and procedures as codes, then groups them.
+- `drgClassificationDesc` always comes from the grouper's official code table — it is never free-text generated.
+- When a claim genuinely cannot be grouped, the grouper returns PhilHealth's sentinel codes: `26509` (Ungroupable), `26519` (Unacceptable PDx), `26539` (Ungroupable, invalid age), `26549` (LOS < 2 hours). When DRG cannot be determined at all (e.g., insufficient clinical data), all three DRG fields are `null`.
 
 ---
 
@@ -621,6 +633,7 @@ async function main() {
   const result = await waitForResult(submitted.sessionId);
   console.log('Status:', result.status, '| claimStatus:', result.claimStatus);
   console.log('Quality:', result.result && result.result.qualityPercentage);
+  console.log('DRG:', result.result && result.result.drgClassification, '-', result.result && result.result.drgClassificationDesc);
   console.log('Rejections:', JSON.stringify(result.result && result.result.rejectionReason, null, 2));
 }
 
@@ -829,6 +842,7 @@ async function main(): Promise<void> {
   const result = await waitForResult(submitted.sessionId);
   console.log('Status:', result.status, '| claimStatus:', result.claimStatus);
   console.log('Quality:', result.result?.qualityPercentage);
+  console.log('DRG:', result.result?.drgClassification, '-', result.result?.drgClassificationDesc);
   console.log('Rejections:', result.result?.rejectionReason);
 }
 

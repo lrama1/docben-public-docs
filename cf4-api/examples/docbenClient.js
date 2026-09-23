@@ -128,6 +128,7 @@ async function main() {
   const result = await waitForResult(submitted.sessionId);
   console.log('Status:', result.status, '| claimStatus:', result.claimStatus);
   console.log('Quality:', result.result && result.result.qualityPercentage);
+  console.log('DRG:', result.result && result.result.drgClassification, '-', result.result && result.result.drgClassificationDesc);
   console.log('Rejections:', JSON.stringify(result.result && result.result.rejectionReason, null, 2));
 }
 
