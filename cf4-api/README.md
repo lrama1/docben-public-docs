@@ -58,7 +58,7 @@ Validation is **asynchronous**: you submit a claim, receive a `sessionId`, then 
 API keys are issued by DocBen. Contact your DocBen account manager to request a key. You will receive:
 
 - **An API key** (a long random string) — shown **only once**. Store it securely.
-- Your **client ID** and the limits applied to your account (request quota, rate limit, token cap).
+- Your **tenant ID** (returned as `clientId` in API responses) and the limits applied to your account (request quota, rate limit, token cap).
 
 > ⚠️ **Keep your API key secret.** It identifies and meters your account. If it is ever exposed, contact DocBen immediately to rotate it. Do not embed it in client-side (browser/mobile) code or commit it to source control.
 
@@ -277,7 +277,7 @@ Returns your current monthly usage and limits.
 
 ```json
 {
-  "clientId": "your-client-id",
+  "clientId": "your-tenant-id",
   "status": "active",
   "monthlyRequestQuota": 1000,
   "requestsUsed": 42,
