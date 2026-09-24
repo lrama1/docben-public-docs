@@ -12,6 +12,10 @@ Welcome! This guide shows you how to integrate your system with the **DocBen CF4
 > **Protocol:** HTTPS + JSON
 > **Auth:** API key (`x-api-key` header)
 
+> 🎬 **Prefer video?** Watch a narrated walkthrough first:
+> - [Integration walkthrough (browser test client)](../videos/api-integration-test-client.mp4) — API key, quota, submit, poll, result.
+> - [curl / HTTP walkthrough](../videos/api-integration-curl.mp4) — the raw requests in a terminal.
+
 ---
 
 ## Table of Contents
