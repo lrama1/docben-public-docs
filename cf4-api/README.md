@@ -1,14 +1,14 @@
 ---
-title: DocBen CF4 Validation API — Client Integration Guide
-description: Submit PhilHealth CF4 claims for AI-powered validation via the public API.
+title: DocBen PhilHealth Claims API — Client Integration Guide
+description: Submit PhilHealth claims for AI-powered validation via the public API.
 permalink: /cf4-api/
 ---
 
-# DocBen CF4 Validation API — Client Integration Guide
+# DocBen PhilHealth Claims API — Client Integration Guide
 
-Welcome! This guide shows you how to integrate your system with the **DocBen CF4 Validation API** so you can submit Philippine PhilHealth CF4 claims for AI-powered validation and retrieve the results programmatically.
+Welcome! This guide shows you how to integrate your system with the **DocBen PhilHealth Claims API** so you can submit Philippine PhilHealth claims for AI-powered validation and retrieve the results programmatically.
 
-> **What vs. how:** the API validates **CF4 claims**. Submit in whichever format your system produces — the **DocBen JSON** format, or the **official PhilHealth eClaims 3.0 XML** (we translate it to the internal CF4 format before validating). CF4 is *what* we validate; JSON/XML is *how* you send it.
+> **What vs. how:** the API validates **PhilHealth claims**. Submit in whichever format your system produces — the **DocBen JSON** format, or the **official PhilHealth eClaims 3.0 XML** (we translate it to the internal claim format before validating). The claim is *what* we validate; JSON/XML is *how* you send it. CF4 is the underlying PhilHealth clinical form a claim is built from.
 
 > **Audience:** 3rd-party developers / integrators
 > **Protocol:** HTTPS + JSON
@@ -44,7 +44,7 @@ Welcome! This guide shows you how to integrate your system with the **DocBen CF4
 
 ## 1. Overview
 
-The DocBen CF4 Validation API lets you submit a CF4 claim (patient info, history, physical exam, doctor's orders, medicines, etc.) plus optional supporting documents. Our AI pipeline validates the claim against PhilHealth rules and returns:
+The DocBen PhilHealth Claims API lets you submit a claim (patient info, history, physical exam, doctor's orders, medicines, etc.) plus optional supporting documents. Our AI pipeline validates the claim against PhilHealth rules and returns:
 
 - a **quality percentage** (0–100),
 - a list of **rejection reasons** (issues that would cause PhilHealth to deny the claim), and
@@ -52,7 +52,7 @@ The DocBen CF4 Validation API lets you submit a CF4 claim (patient info, history
 
 **Two ways to submit a claim:**
 
-1. **JSON (DocBen proprietary format)** — a structured JSON payload describing the claim (see [CF4 Payload Fields](#cf4-payload-fields)).
+1. **JSON (DocBen proprietary format)** — a structured JSON payload describing the claim (see [Claim Payload Fields](#cf4-payload-fields)).
 2. **XML (official PhilHealth eClaims 3.0)** — send the standard eClaims 3.0 XML document and the API translates it to the internal format before validating. See [Submitting as eClaims 3.0 XML](#submitting-as-eclaims-30-xml).
 
 Validation is **asynchronous**: you submit a claim, receive a `sessionId`, then poll for the result. A typical validation completes in **10–60 seconds** depending on the number of attachments (longer when attachments require OCR/classification).
@@ -112,7 +112,7 @@ sequenceDiagram
     participant A as DocBen API
     participant W as Validation Worker
 
-    C->>A: POST /public/v1/validations (CF4 claim)
+    C->>A: POST /public/v1/validations (claim)
     A->>A: Quota & limit checks
     A-->>C: 202 Accepted { sessionId, status: "PROCESSING" }
     A->>W: async validation
@@ -141,7 +141,7 @@ All endpoints are under the `/public/v1` prefix.
 
 | Method | Path | Purpose |
 |---|---|---|
-| `POST` | `/public/v1/validations` | Submit a CF4 claim for validation |
+| `POST` | `/public/v1/validations` | Submit a claim for validation |
 | `GET` | `/public/v1/validations/{sessionId}` | Poll validation status/result |
 | `GET` | `/public/v1/quota` | Check your current usage & limits |
 | `POST` | `/public/v1/uploads/init` | Begin a file (attachment) upload |
@@ -153,7 +153,7 @@ All endpoints are under the `/public/v1` prefix.
 
 ### POST /public/v1/validations
 
-Submit a CF4 claim for validation. You can submit in **either** of two formats:
+Submit a claim for validation. You can submit in **either** of two formats:
 
 - **JSON** (`Content-Type: application/json`) — the DocBen proprietary payload.
 - **XML** (`Content-Type: application/xml`) — an official PhilHealth eClaims 3.0 document.
@@ -162,7 +162,7 @@ Submit a CF4 claim for validation. You can submit in **either** of two formats:
 
 ```json
 {
-  "message": { "...CF4 claim fields...": "..." },
+  "message": { "...claim fields...": "..." },
   "attachmentsMeta": [
     {
       "attachmentId": "a1b2c3d4-...",
@@ -177,7 +177,7 @@ Submit a CF4 claim for validation. You can submit in **either** of two formats:
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `message` | object | ✅ (JSON) | The CF4 claim payload (see [CF4 payload](#cf4-payload-fields)). |
+| `message` | object | ✅ (JSON) | The claim payload (see [claim payload](#cf4-payload-fields)). |
 | `attachmentsMeta` | array | ➖ | Metadata for attachments previously uploaded via `/uploads/*`. Omit for no attachments. |
 
 **XML request body:** the raw eClaims 3.0 document as the request body, with header `Content-Type: application/xml`. Attachments are embedded in the XML as base64 `<DOCUMENT>` entries (see [Submitting as eClaims 3.0 XML](#submitting-as-eclaims-30-xml)).
@@ -186,7 +186,7 @@ Submit a CF4 claim for validation. You can submit in **either** of two formats:
 
 ```json
 {
-  "message": "CF4 validation started.",
+  "message": "Claim validation started.",
   "sessionId": "9f2c1a7e-3d4b-4e8f-9a01-1c2d3e4f5a6b",
   "validationStatus": "PROCESSING",
   "validationRequestId": "c41f...",
@@ -499,7 +499,7 @@ For each file: `init` → one or more `chunk` → `complete`. Collect each retur
 
 ```
 POST /public/v1/validations
-{ "message": { ...CF4 fields... }, "attachmentsMeta": [ ...attachment objects... ] }
+{ "message": { ...claim fields... }, "attachmentsMeta": [ ...attachment objects... ] }
 ```
 
 Read `sessionId` from the `202` response.
@@ -524,7 +524,7 @@ A complete, dependency-free client using Node 18+'s built-in `fetch`. Save as `d
 
 ```js
 /**
- * DocBen CF4 Validation API — minimal JavaScript client (Node 18+).
+ * DocBen PhilHealth Claims API — minimal JavaScript client (Node 18+).
  * No external dependencies.
  */
 
@@ -620,7 +620,7 @@ async function waitForResult(sessionId, { intervalMs = 4000, timeoutMs = 180000 
 
 // ── Example usage ─────────────────────────────────────────────
 async function main() {
-  // Load your CF4 claim (see sample-cf4.json in this package).
+  // Load your claim (see sample-cf4.json in this package).
   const cf4Message = JSON.parse(fs.readFileSync(path.join(__dirname, 'sample-cf4.json'), 'utf8'));
 
   // Optional: check quota first.
@@ -674,7 +674,7 @@ The same client with full types. Save as `docbenClient.ts`. Works with `ts-node`
 
 ```ts
 /**
- * DocBen CF4 Validation API — TypeScript client (Node 18+).
+ * DocBen PhilHealth Claims API — TypeScript client (Node 18+).
  */
 
 import fs from 'fs';
@@ -1071,9 +1071,9 @@ Use **XML** if your system already produces PhilHealth eClaims 3.0 documents (le
 
 ---
 
-## CF4 Payload Fields
+## Claim Payload Fields
 
-The `message` object accepts the CF4 claim fields shown below. A complete, working example is provided in `sample-cf4.json` (in this package). Field names are case-sensitive.
+The `message` object accepts the claim fields shown below. A complete, working example is provided in `sample-cf4.json` (in this package). Field names are case-sensitive.
 
 ```json
 {

@@ -1,15 +1,15 @@
 openapi: 3.0.3
 info:
-  title: DocBen CF4 Validation API
+  title: DocBen PhilHealth Claims API
   version: 1.0.0
   description: |
-    Submit Philippine PhilHealth CF4 claims for AI-powered validation and retrieve
+    Submit Philippine PhilHealth claims for AI-powered validation and retrieve
     the results programmatically.
 
-    **What vs. how:** the API validates **CF4 claims**. Submit in whichever format your
+    **What vs. how:** the API validates **PhilHealth claims**. Submit in whichever format your
     system produces — the DocBen **JSON** format, or the official PhilHealth **eClaims 3.0 XML**
-    (translated to the internal CF4 format before validating). CF4 is *what* we validate;
-    JSON/XML is *how* you send it.
+    (translated to the internal claim format before validating). The claim is *what* we validate;
+    JSON/XML is *how* you send it. CF4 is the underlying PhilHealth clinical form a claim is built from.
 
     **Authentication:** every request requires an API key sent in the `x-api-key` header.
 
@@ -26,7 +26,7 @@ servers:
     description: Production
 tags:
   - name: Validation
-    description: Submit and poll CF4 validations
+    description: Submit and poll claim validations
   - name: Quota
     description: Account usage and limits
   - name: Attachments
@@ -36,13 +36,13 @@ paths:
   /public/v1/validations:
     post:
       tags: [Validation]
-      summary: Submit a CF4 claim for validation
+      summary: Submit a claim for validation
       description: |
         Starts an asynchronous validation. Returns `202 Accepted` with a `sessionId`
         used to poll for the result.
 
         **Two input formats are supported:**
-        - `application/json` — the DocBen CF4 JSON format (`message` + optional
+        - `application/json` — the DocBen claim JSON format (`message` + optional
           `attachmentsMeta`). Attachments must be pre-uploaded via `/uploads/*`.
         - `application/xml` — a raw **PhilHealth eClaims 3.0 XML** document
           (`<ECLAIMS>` root), sent as the raw body. The API translates it to the
@@ -417,7 +417,7 @@ components:
     Cf4Message:
       type: object
       description: |
-        The CF4 claim payload. Field names are case-sensitive. See the integration
+        The claim payload. Field names are case-sensitive. See the integration
         guide for the full field list. Additional fields are permitted.
       additionalProperties: true
       example:

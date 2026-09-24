@@ -108,7 +108,7 @@
       This Privacy Policy describes how DocBen (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or
       &ldquo;our&rdquo;) collects, uses, and protects information when you use the
       DocBen Dictation mobile application (the &ldquo;App&rdquo;). The App is a
-      clinical voice dictation companion that helps physicians create PhilHealth CF4
+      clinical voice dictation companion that helps physicians create PhilHealth
       claim documentation through speech-to-text transcription and AI-assisted field
       extraction. By installing or using the App, you agree to the practices described
       in this Policy.
@@ -119,8 +119,8 @@
     <h3>1.1 Information You Provide</h3>
     <ul>
       <li><strong>Account credentials.</strong> When you sign in, we collect your Cognito username and authentication token to verify your identity.</li>
-      <li><strong>Patient information.</strong> You may enter patient identifiers (name, birth date, sex, chart number) and clinical details needed for CF4 documentation.</li>
-      <li><strong>Dictation content.</strong> Voice recordings and the resulting transcripts, along with any AI-extracted CF4 fields you review and finalize.</li>
+      <li><strong>Patient information.</strong> You may enter patient identifiers (name, birth date, sex, chart number) and clinical details needed for claim documentation.</li>
+      <li><strong>Dictation content.</strong> Voice recordings and the resulting transcripts, along with any AI-extracted claim fields you review and finalize.</li>
     </ul>
 
     <h3>1.2 Information Collected Automatically</h3>
@@ -132,7 +132,7 @@
     <h2>2. How We Use Information</h2>
     <ul>
       <li>To authenticate your account and authorize API requests.</li>
-      <li>To transcribe your dictation and extract structured CF4 fields using AI services.</li>
+      <li>To transcribe your dictation and extract structured claim fields using AI services.</li>
       <li>To save and retrieve patient records and dictation history linked to your hospital group.</li>
       <li>To operate offline features, such as caching the patient list and queuing failed saves for retry.</li>
       <li>To improve reliability, diagnose crashes, and maintain the App.</li>
@@ -165,7 +165,7 @@
     <ul>
       <li><strong>Amazon Cognito</strong> &mdash; authentication and user identity.</li>
       <li><strong>Amazon Web Services (DynamoDB, S3, KMS)</strong> &mdash; data storage and encryption.</li>
-      <li><strong>OpenAI</strong> &mdash; AI-powered CF4 field extraction from transcripts.</li>
+      <li><strong>OpenAI</strong> &mdash; AI-powered claim field extraction from transcripts.</li>
       <li><strong>expo-speech-recognition</strong> &mdash; on-device speech-to-text transcription.</li>
     </ul>
 
@@ -180,7 +180,7 @@
     <p>
       Local audio recordings are deleted after save or discard. Finalized dictation
       records are retained on the backend for as long as needed to support your
-      hospital&rsquo;s CF4 documentation workflow, or until you delete them. Account
+      hospital&rsquo;s claim documentation workflow, or until you delete them. Account
       and authentication data is retained for the lifetime of your Cognito account.
     </p>
 

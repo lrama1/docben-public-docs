@@ -1,7 +1,7 @@
 {
   "name": "docben-cf4-api-client-examples",
   "version": "1.0.0",
-  "description": "Example clients for the DocBen CF4 Validation API",
+  "description": "Example clients for the DocBen PhilHealth Claims API",
   "private": true,
   "type": "module",
   "engines": {

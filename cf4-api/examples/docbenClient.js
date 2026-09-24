@@ -1,5 +1,5 @@
 /**
- * DocBen CF4 Validation API — minimal JavaScript client (Node 18+).
+ * DocBen PhilHealth Claims API — minimal JavaScript client (Node 18+).
  * No external dependencies. Set DOCBEN_API_KEY before running.
  */
 

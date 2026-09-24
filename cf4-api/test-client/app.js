@@ -1,5 +1,5 @@
 /**
- * DocBen CF4 Validation API — browser test client.
+ * DocBen PhilHealth Claims API — browser test client.
  *
  * A dependency-free, client-side-only app that talks to the live public API
  * exactly like a 3rd-party integrator: x-api-key auth, multipart attachment
@@ -274,7 +274,7 @@
     try {
       message = JSON.parse(els.cf4Json.value);
     } catch (e) {
-      setResultStatus(pill('Invalid CF4 JSON: ' + e.message, 'err'));
+      setResultStatus(pill('Invalid claim JSON: ' + e.message, 'err'));
       return;
     }
     const failed = state.attachments.filter((a) => a.status === 'error');
@@ -340,7 +340,7 @@
     els.btnAutoPoll.textContent = 'Start auto-poll';
   }
 
-  // ── Sample CF4 payload ─────────────────────────────────────────
+  // ── Sample claim payload ───────────────────────────────────────
   const SAMPLE = {
     hciName: 'Sample Hospital', accreditationNumber: 'H12345',
     patientLastName: 'Doe', patientFirstName: 'John', patientMiddleName: 'A',

@@ -8,7 +8,7 @@ a static site (e.g. via GitHub Pages).
 | Path | What it is |
 |---|---|
 | [`index.html`](index.html) | Landing page linking to everything below |
-| [`cf4-api/`](cf4-api/) | **CF4 Validation API** — everything a 3rd-party integrator needs |
+| [`cf4-api/`](cf4-api/) | **PhilHealth Claims API** — everything a 3rd-party integrator needs |
 | [`cf4-api/README.md`](cf4-api/README.md) | Integration guide (auth, quotas, endpoints, attachments, samples, errors, FAQ) |
 | [`cf4-api/openapi.yaml`](cf4-api/openapi.yaml) | OpenAPI 3.0 spec (generate SDKs, import to Postman, render docs) |
 | [`cf4-api/examples/`](cf4-api/examples/) | JavaScript + TypeScript client examples |
@@ -18,7 +18,7 @@ a static site (e.g. via GitHub Pages).
 
 ## Publishing
 
-This repo contains **no secrets and no real personal data** — the sample CF4
+This repo contains **no secrets and no real personal data** — the sample claim
 payload uses placeholder values (e.g. "John Doe"). API keys are issued per
 client and are never stored here.
 

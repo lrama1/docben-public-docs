@@ -2,7 +2,7 @@
 # https://docben (public docs site)
 
 title: DocBen Public Documentation
-description: CF4 Validation API integration guide, client examples, and product privacy policies.
+description: PhilHealth Claims API integration guide, client examples, and product privacy policies.
 
 # Jekyll theme so Markdown pages (the integration guide, etc.) render as styled
 # HTML instead of raw text. cayman is a clean docs-style theme.

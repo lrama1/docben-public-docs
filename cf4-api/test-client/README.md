@@ -1,7 +1,7 @@
-# DocBen CF4 API — Test Client
+# DocBen PhilHealth Claims API — Test Client
 
-A zero-dependency, browser-only app for manually exercising the public CF4
-Validation API exactly the way a 3rd-party integrator would. No build step, no
+A zero-dependency, browser-only app for manually exercising the public PhilHealth
+Claims API exactly the way a 3rd-party integrator would. No build step, no
 server — open it and point it at the API.
 
 ## Run it
@@ -28,7 +28,7 @@ Then open the printed URL (e.g. http://localhost:8080 or http://localhost:3000).
 3. **Attachments (optional)** — pick one or more files. They upload via the
    3-step multipart flow (init → chunk → complete) and are referenced in the
    validation.
-4. **Submit** — use the pre-loaded sample CF4 claim or switch to **Edit JSON**
+4. **Submit** — use the pre-loaded sample claim or switch to **Edit JSON**
    to customize it, then click **Submit for validation**.
 5. **Result** — the app auto-polls every 4s until the validation is
    `COMPLETED` or `FAILED`, then shows the result JSON (quality %, rejection

@@ -1,5 +1,5 @@
 /**
- * DocBen CF4 Validation API — TypeScript client (Node 18+).
+ * DocBen PhilHealth Claims API — TypeScript client (Node 18+).
  * Set DOCBEN_API_KEY before running. Compile with tsc or run via ts-node.
  */
 
