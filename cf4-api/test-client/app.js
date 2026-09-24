@@ -23,6 +23,7 @@
     qRps: $('qRps'), qReset: $('qReset'), qClient: $('qClient'),
     fileInput: $('fileInput'), fileList: $('fileList'),
     cf4Json: $('cf4Json'), tabEdit: $('tabEdit'), tabSample: $('tabSample'),
+    cf4Xml: $('cf4Xml'), tabXml: $('tabXml'),
     btnSubmit: $('btnSubmit'),
     resultStatus: $('resultStatus'), resultJson: $('resultJson'),
     sessionId: $('sessionId'), btnPoll: $('btnPoll'), btnAutoPoll: $('btnAutoPoll'), btnCopySession: $('btnCopySession'),
@@ -34,6 +35,7 @@
     attachments: [], // [{ attachmentId, s3Key, fileName, size, contentType, status }]
     sessionId: null,
     autoPollTimer: null,
+    submitTab: 'sample', // 'sample' | 'edit' | 'xml'
   };
 
   // ── Persistence ────────────────────────────────────────────────
@@ -76,6 +78,30 @@
     let data;
     try { data = text ? JSON.parse(text) : {}; } catch { data = { raw: text }; }
     log(`${method} ${path} → ${res.status}`, res.ok ? 'ok' : 'err');
+    if (!res.ok) {
+      const err = new Error(data.message || `HTTP ${res.status}`);
+      err.status = res.status;
+      err.code = data.code;
+      err.body = data;
+      throw err;
+    }
+    return data;
+  }
+
+  // ── XML submit helper (raw body, application/xml) ─────────────
+  async function apiXml(path, xmlString) {
+    const base = els.baseUrl.value.trim().replace(/\/$/, '');
+    const key = els.apiKey.value.trim();
+    if (!base || !key) throw new Error('Set the Base URL and API key first.');
+    const res = await fetch(`${base}${path}`, {
+      method: 'POST',
+      headers: { 'x-api-key': key, 'Content-Type': 'application/xml' },
+      body: xmlString,
+    });
+    const text = await res.text();
+    let data;
+    try { data = text ? JSON.parse(text) : {}; } catch { data = { raw: text }; }
+    log(`POST ${path} (XML) → ${res.status}`, res.ok ? 'ok' : 'err');
     if (!res.ok) {
       const err = new Error(data.message || `HTTP ${res.status}`);
       err.status = res.status;
@@ -201,7 +227,49 @@
   }
 
   // ── Submit + poll ──────────────────────────────────────────────
+  function handleSubmitResponse(resp, note) {
+    state.sessionId = resp.sessionId;
+    els.sessionId.value = resp.sessionId;
+    els.btnPoll.disabled = false;
+    els.btnAutoPoll.disabled = false;
+    els.btnCopySession.disabled = false;
+    setResultStatus(pill('PROCESSING', 'info') + ` <span class="hint">sessionId ${escapeHtml(resp.sessionId)}</span>`);
+    els.resultJson.textContent = JSON.stringify(resp, null, 2);
+    log(note, 'ok');
+    startAutoPoll(); // auto-start polling for convenience
+  }
+
+  function handleSubmitError(e) {
+    setResultStatus(pill(`${e.status || ''} ${e.code || ''}`, 'err') + ` <span class="hint">${escapeHtml(e.message)}</span>`);
+    els.resultJson.textContent = JSON.stringify(e.body || { error: e.message }, null, 2);
+  }
+
   async function submitValidation() {
+    // ── XML mode: send the raw document as application/xml ──
+    if (state.submitTab === 'xml') {
+      const xml = els.cf4Xml.value.trim();
+      if (!xml) {
+        setResultStatus(pill('Paste an eClaims 3.0 XML document first.', 'warn'));
+        return;
+      }
+      if (!/<ECLAIMS[\s>]/i.test(xml)) {
+        setResultStatus(pill('That does not look like an eClaims document (no <ECLAIMS> root).', 'err'));
+        return;
+      }
+      els.btnSubmit.disabled = true;
+      setResultStatus('<span class="spinner"></span> ' + pill('Submitting…', 'info'));
+      try {
+        const resp = await apiXml('/public/v1/validations', xml);
+        handleSubmitResponse(resp, 'Validation submitted (eClaims XML)');
+      } catch (e) {
+        handleSubmitError(e);
+      } finally {
+        els.btnSubmit.disabled = false;
+      }
+      return;
+    }
+
+    // ── JSON mode (sample / edit tabs share the JSON textarea value) ──
     let message;
     try {
       message = JSON.parse(els.cf4Json.value);
@@ -227,18 +295,9 @@
     setResultStatus('<span class="spinner"></span> ' + pill('Submitting…', 'info'));
     try {
       const resp = await api('POST', '/public/v1/validations', { message, attachmentsMeta });
-      state.sessionId = resp.sessionId;
-      els.sessionId.value = resp.sessionId;
-      els.btnPoll.disabled = false;
-      els.btnAutoPoll.disabled = false;
-      els.btnCopySession.disabled = false;
-      setResultStatus(pill('PROCESSING', 'info') + ` <span class="hint">sessionId ${escapeHtml(resp.sessionId)}</span>`);
-      els.resultJson.textContent = JSON.stringify(resp, null, 2);
-      log(`Validation submitted (${attachmentsMeta.length} attachment(s))`, 'ok');
-      startAutoPoll(); // auto-start polling for convenience
+      handleSubmitResponse(resp, `Validation submitted (${attachmentsMeta.length} attachment(s))`);
     } catch (e) {
-      setResultStatus(pill(`${e.status || ''} ${e.code || ''}`, 'err') + ` <span class="hint">${escapeHtml(e.message)}</span>`);
-      els.resultJson.textContent = JSON.stringify(e.body || { error: e.message }, null, 2);
+      handleSubmitError(e);
     } finally {
       els.btnSubmit.disabled = false;
     }
@@ -321,14 +380,46 @@
     outcome: ['IMPROVED'], outcomeReason: '',
   };
 
+  // ── Sample eClaims 3.0 XML document ────────────────────────────
+  const SAMPLE_XML = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ECLAIMS SYSTEM "eClaims3.0.dtd">
+<ECLAIMS pUserName="" pPassword="" pHospitalCode="H91000001" pSoftwareCertId="">
+  <CLAIM pClaimNumber="CLM2026002" pTrackingNumber="TRK-P002" pIsFinal="Y">
+    <CF1 pMemberPIN="12-111222333-1" pMemberLname="AQUINO" pMemberFname="RAMON" pMemberMname="LOPEZ" pMemberDob="1972-02-20" pMemberSex="M" pPatientType="M" pPatientPIN="12-111222333-1" pPatientLname="AQUINO" pPatientFname="RAMON" pPatientMname="LOPEZ" pPatientDob="1972-02-20" pPatientSex="M" pRelationToMember="M" />
+    <CF2 pAdmissionDate="2026-08-05" pAdmissionTime="14:00" pDischargeDate="2026-08-10" pDischargeTime="10:00" pDischargeDisposition="IMPROVED" pAccommodationType="NIB" pFirstCaseRateCode="J15.9">
+      <DIAGNOSES>
+        <ICD_CODE pIcdCode="J15.9" pDescription="Pneumonia, unspecified" pIsPrimary="Y" />
+      </DIAGNOSES>
+      <PHYSICIANS>
+        <DOCTOR pDoctorPAN="100088219" pDoctorLname="REYES" pDoctorFname="ALEXANDER" pDoctorMname="B" pActualFee="8000.00" pDiscountAmount="0.00" pPhilHealthBenefit="4000.00" />
+      </PHYSICIANS>
+    </CF2>
+    <CF4 pHciCaseNo="CASE-2001" pHciTransNo="TR-2001" pEffYear="2026" pEnlistStat="1" pEnlistDate="2026-08-05" pPackageType="A">
+      <VITAL_SIGNS pSystolic="130" pDiastolic="85" pPulseRate="98" pRespRate="24" pTemperature="38.4" />
+      <CLINICAL_SUMMARY pChiefComplaint="Fever and productive cough for 4 days" pHistoryPresentIllness="Four days of high-grade fever with yellowish sputum, dyspnea, and right-sided pleuritic chest pain." pPhysicalExamination="Chest/Lungs: crackles and decreased breath sounds right lower lobe. CVS: tachycardic, regular rhythm." />
+      <MEDICATIONS>
+        <DRUG pGenCode="GEN00021" pBrandName="Ceftriaxone 1g IV" pQuantity="10" pTotalCost="5000.00" />
+        <DRUG pGenCode="GEN00045" pBrandName="Paracetamol 500mg" pQuantity="15" pTotalCost="75.00" />
+      </MEDICATIONS>
+    </CF4>
+    <ESOA pTotalActualCharges="32000.00" pChargesNetOfVat="32000.00" pTotalPhilHealthBenefit="15000.00" pTotalDiscount="0.00" pBalance="17000.00">
+      <ITEMIZED_CHARGES>
+        <CHARGE_ITEM pCategory="LABORATORY" pPhicCode="LB02" pDescription="CBC, Chest X-ray" pQuantity="1" pUnitPrice="3500.00" pTotalAmount="3500.00" />
+      </ITEMIZED_CHARGES>
+    </ESOA>
+  </CLAIM>
+</ECLAIMS>`;
+
   // ── Tabs ───────────────────────────────────────────────────────
   document.querySelectorAll('.tab').forEach((tab) => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
       tab.classList.add('active');
       const which = tab.dataset.tab;
+      state.submitTab = which;
       els.tabEdit.classList.toggle('hidden', which !== 'edit');
       els.tabSample.classList.toggle('hidden', which !== 'sample');
+      els.tabXml.classList.toggle('hidden', which !== 'xml');
     });
   });
 
@@ -358,6 +449,7 @@
 
   // ── Init ───────────────────────────────────────────────────────
   els.cf4Json.value = JSON.stringify(SAMPLE, null, 2);
+  els.cf4Xml.value = SAMPLE_XML;
   loadConn();
   renderFiles();
   if (els.apiKey.value) {

@@ -178,12 +178,17 @@
         <div class="tabs">
           <div class="tab active" data-tab="sample">Use sample claim</div>
           <div class="tab" data-tab="edit">Edit JSON</div>
+          <div class="tab" data-tab="xml">eClaims 3.0 XML</div>
         </div>
         <div id="tabEdit" class="hidden">
           <textarea id="cf4Json" rows="14" spellcheck="false"></textarea>
         </div>
+        <div id="tabXml" class="hidden">
+          <textarea id="cf4Xml" rows="16" spellcheck="false" placeholder="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;"></textarea>
+          <div class="hint">Official PhilHealth eClaims 3.0 document. Sent raw with <code>Content-Type: application/xml</code>. Attachments (section 2) only apply to JSON claims — XML attachments are embedded as base64 <code>&lt;DOCUMENT&gt;</code> entries instead.</div>
+        </div>
         <div id="tabSample">
-          <div class="hint">A complete, valid CF4 claim is pre-loaded. Switch to "Edit JSON" to customize it.</div>
+          <div class="hint">A complete, valid CF4 claim is pre-loaded. Switch to "Edit JSON" to customize it, or "eClaims 3.0 XML" to submit the official XML format.</div>
         </div>
         <div class="btnrow">
           <button id="btnSubmit">Submit for validation</button>
