@@ -14,7 +14,8 @@ Welcome! This guide shows you how to integrate your system with the **DocBen Phi
 > **Protocol:** HTTPS + JSON
 > **Auth:** API key (`x-api-key` header)
 
-> 🎬 **Prefer video?** Watch a narrated walkthrough first:
+> 🎬 **Prefer video?**
+> - [Promo: catch it before PhilHealth does](../videos/claims-api-promo.mp4) — a 52-second overview.
 > - [Integration walkthrough (browser test client)](../videos/api-integration-test-client.mp4) — API key, quota, submit, poll, result.
 > - [curl / HTTP walkthrough](../videos/api-integration-curl.mp4) — the raw requests in a terminal.
 
