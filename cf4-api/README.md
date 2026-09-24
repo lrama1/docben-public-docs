@@ -8,6 +8,8 @@ permalink: /cf4-api/
 
 Welcome! This guide shows you how to integrate your system with the **DocBen CF4 Validation API** so you can submit Philippine PhilHealth CF4 claims for AI-powered validation and retrieve the results programmatically.
 
+> **What vs. how:** the API validates **CF4 claims**. Submit in whichever format your system produces — the **DocBen JSON** format, or the **official PhilHealth eClaims 3.0 XML** (we translate it to the internal CF4 format before validating). CF4 is *what* we validate; JSON/XML is *how* you send it.
+
 > **Audience:** 3rd-party developers / integrators
 > **Protocol:** HTTPS + JSON
 > **Auth:** API key (`x-api-key` header)

@@ -6,6 +6,11 @@ info:
     Submit Philippine PhilHealth CF4 claims for AI-powered validation and retrieve
     the results programmatically.
 
+    **What vs. how:** the API validates **CF4 claims**. Submit in whichever format your
+    system produces — the DocBen **JSON** format, or the official PhilHealth **eClaims 3.0 XML**
+    (translated to the internal CF4 format before validating). CF4 is *what* we validate;
+    JSON/XML is *how* you send it.
+
     **Authentication:** every request requires an API key sent in the `x-api-key` header.
 
     **Async model:** validation is asynchronous. Submit a claim (`POST /public/v1/validations`),
