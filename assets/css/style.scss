@@ -26,5 +26,10 @@
 .main-content a { color: #1976d2; }
 .main-content a:hover { color: #42a5f5; }
 
-/* Headings get a subtle brand tint on h2. */
-.main-content h2 { color: #125a9e; }
+/* Headings → DocBen brand blue (override cayman green). */
+.main-content h1,
+.main-content h2,
+.main-content h3,
+.main-content h4,
+.main-content h5,
+.main-content h6 { color: #125a9e; }
