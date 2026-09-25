@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en-US' }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="icon" type="image/png" href="{{ '/assets/icons/shield.png' | relative_url }}">
+    {% include head-custom.html %}
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">{{ page.title | default: site.title }}</h1>
+      <h2 class="project-tagline">{{ page.description | default: site.description }}</h2>
+      <a href="{{ '/index.html' | relative_url }}" class="btn">← Docs home</a>
+      {% if page.url != '/index.html' %}
+        <a href="{{ '/cf4-api/' | relative_url }}" class="btn">Integration guide</a>
+        <a href="{{ '/cf4-api/test-client/' | relative_url }}" class="btn">Test client</a>
+      {% endif %}
+    </section>
+
+    <section class="main-content">
+      {{ content }}
+    </section>
+
+    <footer class="site-footer">
+      <span class="site-footer-owner"><a href="{{ '/index.html' | relative_url }}">DocBen Public Documentation</a> — validate PhilHealth claims before submission.</span>
+      <span class="site-footer-credits">&copy; 2026 DocBen. All rights reserved.</span>
+    </footer>
+  </body>
+</html>

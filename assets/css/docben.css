@@ -178,3 +178,18 @@ a.card, .card.hover:hover { color: var(--text); }
 /* pill */
 .pill { display: inline-block; padding: 3px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; }
 .pill.brand { background: rgba(25,118,210,.18); color: var(--brand-light); border: 1px solid rgba(66,165,245,.35); }
+
+/* ── Subpage topbar (test client, examples, privacy, guide) ── */
+.topbar {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding: 14px 28px; border-bottom: 1px solid var(--border);
+  background: var(--panel); position: sticky; top: 0; z-index: 40;
+}
+.topbar .brandmark { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 16px; color: var(--text); }
+.topbar .brandmark img { height: 26px; width: auto; }
+.topbar .crumb { color: var(--muted); font-size: 13px; }
+.topbar .crumb a { color: var(--muted); }
+.topbar .crumb a:hover { color: var(--accent); }
+.topbar .spacer { flex: 1; }
+.topbar a.backlink { color: var(--accent); font-size: 13px; font-weight: 600; }
+.topbar a.backlink:hover { text-decoration: none; }

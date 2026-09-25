@@ -1,0 +1,30 @@
+---
+# Jekyll front matter so this file is processed into /assets/css/style.css.
+# Overrides for the cayman theme to match the DocBen brand palette.
+---
+
+@import "{{ site.theme }}";
+
+/* Brand header: DocBen blue gradient instead of cayman green. */
+.page-header {
+  background-color: #1976d2;
+  background-image: linear-gradient(120deg, #125a9e, #1976d2 55%, #42a5f5);
+}
+
+/* Primary buttons → brand blue. */
+.btn {
+  color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+.btn:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Links → DocBen accent blue. */
+.main-content a { color: #1976d2; }
+.main-content a:hover { color: #42a5f5; }
+
+/* Headings get a subtle brand tint on h2. */
+.main-content h2 { color: #125a9e; }
