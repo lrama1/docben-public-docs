@@ -16,7 +16,7 @@ Welcome! This guide shows you how to integrate your system with the **DocBen Phi
 
 > 🎬 **Prefer video?**
 > - [Promo: catch it before PhilHealth does](../videos/claims-api-promo.mp4) — a 52-second overview.
-> - [Integration walkthrough (browser test client)](../videos/api-integration-test-client.mp4) — API key, quota, submit, poll, result.
+> - [Test client walkthrough](../videos/api-integration-test-client.mp4) — use the browser sandbox to verify your key and explore the API (not the integration method itself).
 > - [curl / HTTP walkthrough](../videos/api-integration-curl.mp4) — the raw requests in a terminal.
 
 ---
