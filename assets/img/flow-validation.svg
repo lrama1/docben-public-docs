@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <linearGradient id="band" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14202f"/>
+      <stop offset="1" stop-color="#0d1420"/>
+    </linearGradient>
+    <linearGradient id="ok" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2ea043"/>
+      <stop offset="1" stop-color="#1f7a30"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#4f9cf9"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="300" rx="16" fill="url(#band)" stroke="#33415480"/>
+
+  <!-- Step 1: Your system -->
+  <g>
+    <rect x="40" y="100" width="180" height="100" rx="12" fill="#1a2230" stroke="#4f9cf9" stroke-opacity="0.5"/>
+    <text x="130" y="140" text-anchor="middle" fill="#e6edf3" font-size="18" font-weight="700">Your system</text>
+    <text x="130" y="168" text-anchor="middle" fill="#8b98a9" font-size="13">JSON or eClaims XML</text>
+  </g>
+  <line x1="220" y1="150" x2="290" y2="150" stroke="#4f9cf9" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- Step 2: DocBen validator -->
+  <g>
+    <rect x="290" y="80" width="220" height="140" rx="12" fill="#1976d2"/>
+    <text x="400" y="118" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="700">DocBen validator</text>
+    <text x="400" y="146" text-anchor="middle" fill="#e3f2fd" font-size="13">completeness</text>
+    <text x="400" y="168" text-anchor="middle" fill="#e3f2fd" font-size="13">consistency</text>
+    <text x="400" y="190" text-anchor="middle" fill="#e3f2fd" font-size="13">PhilHealth rules</text>
+  </g>
+  <line x1="510" y1="150" x2="580" y2="150" stroke="#4f9cf9" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- Step 3: result -->
+  <g>
+    <rect x="580" y="100" width="180" height="100" rx="12" fill="#1a2230" stroke="#33415480"/>
+    <text x="670" y="132" text-anchor="middle" fill="#e6edf3" font-size="16" font-weight="700">Instant result</text>
+    <text x="670" y="158" text-anchor="middle" fill="#8b98a9" font-size="12">score · reasons · DRG</text>
+    <text x="670" y="180" text-anchor="middle" fill="#8b98a9" font-size="12">fix before submit</text>
+  </g>
+  <line x1="670" y1="200" x2="670" y2="240" stroke="#3fb950" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- Step 4: clean submit -->
+  <g>
+    <rect x="580" y="244" width="180" height="40" rx="20" fill="url(#ok)"/>
+    <text x="670" y="269" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">Clean submit → PhilHealth</text>
+  </g>
+
+  <text x="40" y="46" fill="#8b98a9" font-size="14" font-weight="600" letter-spacing="1">HOW IT WORKS</text>
+</svg>
