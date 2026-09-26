@@ -6,7 +6,7 @@
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
 
-  mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' });
+  mermaid.initialize({ startOnLoad: false, securityLevel: 'strict' });
 
   function renderMermaid() {
     // kramdown/GFM may emit the diagram as <code class="language-mermaid"> or

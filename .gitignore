@@ -1,1 +1,8 @@
 .ai-coding
+
+# Raw screen recordings + narration assets of the demo-key session.
+# Never commit these — they capture the demo API key being injected.
+videos/raw/
+videos/narration/
+videos/promo/
+videos/timing-*.json
