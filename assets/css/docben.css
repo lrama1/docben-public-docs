@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* DocBen public docs — shared design system.
    Brand palette mirrors docben-ai (MUI): primary #1976D2, dark slate surfaces.
    Used by the landing page, test client, examples, and privacy pages. */
@@ -54,6 +55,8 @@ a:hover { text-decoration: underline; }
 .site-nav .container { display: flex; align-items: center; gap: 24px; height: 64px; }
 .site-nav .brandmark { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text); font-size: 17px; }
 .site-nav .brandmark img { height: 30px; width: auto; }
+.site-footer .brandmark { align-items: center; gap: 10px; font-weight: 700; color: var(--text); font-size: 17px; }
+.site-footer .brandmark img { height: 30px; width: auto; }
 .site-nav .spacer { flex: 1; }
 .site-nav a.navlink { color: var(--muted); font-size: 14px; font-weight: 500; padding: 6px 4px; }
 .site-nav a.navlink:hover { color: var(--text); text-decoration: none; }
@@ -271,6 +274,19 @@ a.card, .card.hover:hover { color: var(--text); }
 
 /* path label on video cards */
 .video-card .badge.path { left: auto; right: 12px; color: #fff; background: rgba(25,118,210,.92); border-color: transparent; }
+
+/* videos placed inside a path section */
+.split .video-card { display: block; }
+.split .video-card .body h3 { font-size: 16px; }
+.watch-label { margin: 0 0 12px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--brand-light); }
+.video-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 560px) { .video-pair { grid-template-columns: 1fr; } }
+.video-pair .video-card .body { padding: 14px 16px; }
+.video-pair .video-card .body h3 { font-size: 15px; margin-bottom: 4px; }
+.video-pair .video-card .body p { font-size: 12.5px; }
+.video-pair .video-card .play span { width: 46px; height: 46px; }
+.video-pair .video-card .play svg { width: 20px; height: 20px; }
+.video-pair .video-card .badge { font-size: 10px; padding: 3px 8px; top: 8px; left: 8px; }
 
 /* outline button for the blue CTA band */
 .cta-band .btn-outline-light { background: transparent; color: #fff; border-color: rgba(255,255,255,.7); }

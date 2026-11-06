@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="DocBen — validate PhilHealth claims before you submit them. Use the DocBen web app, or integrate the PhilHealth Claims API into your own system. Guides, client examples, and narrated videos." />
 <title>DocBen — PhilHealth Claim Validation Docs</title>
-<link rel="stylesheet" href="assets/css/docben.css?v=20261105" />
+<link rel="stylesheet" href="assets/css/docben.css?v=20261105b" />
 <link rel="icon" type="image/png" href="assets/icons/shield.png" />
 </head>
 <body>
@@ -20,7 +20,6 @@
     <span class="spacer"></span>
     <a class="navlink" href="webapp/">Web App</a>
     <a class="navlink" href="cf4-api/">API</a>
-    <a class="navlink" href="#videos">Videos</a>
     <a class="cta" href="#paths">Get Started</a>
   </div>
 </nav>
@@ -72,8 +71,37 @@
 
 <main>
 
+  <!-- ── What you get (both paths) ──────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div class="kicker">What you get on either path</div>
+      <h2>Stop reacting to denials. Start preventing them.</h2>
+      <p class="sub">
+        A denied claim means rework, delay, and lost revenue. The DocBen validator checks every claim
+        before it ever reaches PhilHealth and tells you exactly what to fix.
+      </p>
+      <div class="grid cols-3">
+        <div class="card hover">
+          <span class="icon"><img src="assets/icons/shield.png" alt="" /></span>
+          <h3>Catch denials early</h3>
+          <p>Missing required fields, invalid case-rate codes, and inconsistent clinical data are flagged before submission — not after weeks of waiting.</p>
+        </div>
+        <div class="card hover">
+          <span class="icon"><img src="assets/icons/chart.png" alt="" /></span>
+          <h3>Actionable results</h3>
+          <p>Every validation returns a 0–100 quality score, the exact rejection reasons, and the PhilHealth DRG classification.</p>
+        </div>
+        <div class="card hover">
+          <span class="icon"><img src="assets/icons/edit.png" alt="" /></span>
+          <h3>Submit clean, get paid faster</h3>
+          <p>Clean first-pass submissions mean fewer denials and shorter days-in-AR for your hospital or clinic.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ── Choose your path ──────────────────────────────── -->
-  <section class="section" id="paths">
+  <section class="section alt" id="paths">
     <div class="container">
       <div class="kicker">Two ways to adopt DocBen</div>
       <h2>Choose the path that fits how your team works.</h2>
@@ -155,36 +183,6 @@
     </div>
   </section>
 
-  <!-- ── Why validate first ────────────────────────────── -->
-  <section class="section alt">
-    <div class="container">
-      <div class="kicker">What you get on either path</div>
-      <h2>Stop reacting to denials. Start preventing them.</h2>
-      <p class="sub">
-        A denied claim means rework, delay, and lost revenue. The DocBen validator checks every claim
-        before it ever reaches PhilHealth — whether it's typed into the web app or sent through the API —
-        and tells you exactly what to fix.
-      </p>
-      <div class="grid cols-3">
-        <div class="card hover">
-          <span class="icon"><img src="assets/icons/shield.png" alt="" /></span>
-          <h3>Catch denials early</h3>
-          <p>Missing required fields, invalid case-rate codes, and inconsistent clinical data are flagged before submission — not after weeks of waiting.</p>
-        </div>
-        <div class="card hover">
-          <span class="icon"><img src="assets/icons/chart.png" alt="" /></span>
-          <h3>Actionable results</h3>
-          <p>Every validation returns a 0–100 quality score, the exact rejection reasons, and the PhilHealth DRG classification.</p>
-        </div>
-        <div class="card hover">
-          <span class="icon"><img src="assets/icons/edit.png" alt="" /></span>
-          <h3>Submit clean, get paid faster</h3>
-          <p>Clean first-pass submissions mean fewer denials and shorter days-in-AR for your hospital or clinic.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ── Path A: Web app ───────────────────────────────── -->
   <section class="section" id="webapp">
     <div class="container split">
@@ -204,13 +202,23 @@
         </ol>
         <div class="actions">
           <a class="btn btn-primary" href="webapp/">Read the web app guide</a>
-          <a class="btn btn-ghost" href="videos/docben-ai-create-claim-demo.mp4">▶ Watch the 3½-min demo</a>
+          <a class="btn btn-ghost" href="https://lrama1.github.io/docben-ai3/">Open the web app ↗</a>
         </div>
       </div>
-      <figure>
-        <img class="shot" src="assets/img/shot-webapp-findings.png" alt="The DocBen web app showing the AI Analysis panel listing four issues found in a pneumonia claim: unsupported symptoms, an unsupported chest exam, missing doctor's orders, and a missing chest X-ray report." />
-        <figcaption>The AI Analysis panel lists each issue it found — and why.</figcaption>
-      </figure>
+      <div>
+        <div class="watch-label">Watch</div>
+        <a class="card video-card" href="videos/docben-ai-create-claim-demo.mp4">
+          <div class="thumb">
+            <img src="assets/img/shot-webapp-findings.png" alt="The DocBen web app's AI Analysis panel listing four issues found in a pneumonia claim." />
+            <span class="badge">Demo · 3m 39s</span>
+            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
+          </div>
+          <div class="body">
+            <h3>Create and validate a claim in the web app</h3>
+            <p>Fill in the CF4, attach documents, validate, read the findings, fix them, and re-validate.</p>
+          </div>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -232,65 +240,31 @@
         </ul>
       </div>
       <div>
-        <img class="shot" src="assets/img/shot-client-quota.png" alt="DocBen browser test client showing live quota and rate limits" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Videos ────────────────────────────────────────── -->
-  <section class="section" id="videos">
-    <div class="container">
-      <div class="kicker">Watch</div>
-      <h2>See it in action</h2>
-      <p class="sub">A quick promo, a full web app demo, and two narrated API walkthroughs.</p>
-      <div class="grid cols-2">
-        <a class="card video-card" href="videos/claims-api-promo.mp4">
-          <div class="thumb">
-            <img src="assets/img/flow-validation.svg" alt="" />
-            <span class="badge">Promo · 48s</span>
-            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
-          </div>
-          <div class="body">
-            <h3>Catch It Before PhilHealth Does</h3>
-            <p>Why pre-submission validation prevents denials and speeds reimbursement.</p>
-          </div>
-        </a>
-        <a class="card video-card" href="videos/docben-ai-create-claim-demo.mp4">
-          <div class="thumb">
-            <img src="assets/img/shot-webapp-findings.png" alt="" />
-            <span class="badge">Demo · 3m 39s</span>
-            <span class="badge path">Web app</span>
-            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
-          </div>
-          <div class="body">
-            <h3>Create and Validate a Claim in the Web App</h3>
-            <p>Fill in the CF4, attach documents, validate, read the findings, fix them, and re-validate.</p>
-          </div>
-        </a>
-        <a class="card video-card" href="videos/api-integration-test-client.mp4">
-          <div class="thumb">
-            <img src="assets/img/shot-client-result.png" alt="" />
-            <span class="badge">Walkthrough · 1m</span>
-            <span class="badge path">API</span>
-            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
-          </div>
-          <div class="body">
-            <h3>Test Client Walkthrough</h3>
-            <p>Use the browser sandbox to verify your API key and explore the API — then integrate programmatically via the guide.</p>
-          </div>
-        </a>
-        <a class="card video-card" href="videos/api-integration-curl.mp4">
-          <div class="thumb">
-            <img src="assets/img/shot-client-xml.png" alt="" />
-            <span class="badge">curl · 1m</span>
-            <span class="badge path">API</span>
-            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
-          </div>
-          <div class="body">
-            <h3>curl / HTTP Walkthrough</h3>
-            <p>The raw requests — auth, quota, submit, poll, and the completed result JSON.</p>
-          </div>
-        </a>
+        <div class="watch-label">Watch</div>
+        <div class="video-pair">
+          <a class="card video-card" href="videos/api-integration-test-client.mp4">
+            <div class="thumb">
+              <img src="assets/img/shot-client-result.png" alt="The DocBen browser test client showing a completed validation result." />
+              <span class="badge">1m</span>
+              <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
+            </div>
+            <div class="body">
+              <h3>Test client walkthrough</h3>
+              <p>Verify your API key and explore the API in the browser.</p>
+            </div>
+          </a>
+          <a class="card video-card" href="videos/api-integration-curl.mp4">
+            <div class="thumb">
+              <img src="assets/img/shot-client-xml.png" alt="The DocBen test client with an eClaims XML claim loaded." />
+              <span class="badge">1m</span>
+              <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
+            </div>
+            <div class="body">
+              <h3>curl / HTTP walkthrough</h3>
+              <p>Auth, quota, submit, poll, and the result JSON.</p>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -300,7 +274,7 @@
     <div class="container">
       <div class="cta-band">
         <h2>Ready to submit clean claims?</h2>
-        <p>Start in the web app today, or request an API key from your DocBen account manager to integrate — keys are issued per client and shown only once.</p>
+        <p>Start in the web app today, or ask your DocBen account manager for an API key.</p>
         <div class="actions">
           <a class="btn btn-light" href="webapp/">Start with the web app</a>
           <a class="btn btn-outline-light" href="cf4-api/">Start with the API guide</a>
@@ -334,12 +308,13 @@
       <a href="cf4-api/openapi.yaml">OpenAPI Spec</a>
       <a href="cf4-api/examples/">Client Examples</a>
       <a href="cf4-api/test-client/">Browser Test Client</a>
+      <a href="videos/api-integration-test-client.mp4">Test Client Video</a>
+      <a href="videos/api-integration-curl.mp4">curl / HTTP Video</a>
     </div>
     <div class="col">
-      <h4>Videos</h4>
-      <a href="videos/claims-api-promo.mp4">Promo</a>
-      <a href="videos/api-integration-test-client.mp4">Integration Walkthrough</a>
-      <a href="videos/api-integration-curl.mp4">curl / HTTP Walkthrough</a>
+      <h4>Overview</h4>
+      <a href="#paths">Compare the two paths</a>
+      <a href="videos/claims-api-promo.mp4">Promo Video</a>
     </div>
     <div class="col">
       <h4>Legal</h4>
