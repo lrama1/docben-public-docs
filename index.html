@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="DocBen PhilHealth Claims API — validate claims before you submit to PhilHealth. Integration guides, client examples, narrated videos, and product privacy policies." />
-<title>DocBen — PhilHealth Claims API Docs</title>
+<meta name="description" content="DocBen — validate PhilHealth claims before you submit them. Use the DocBen web app, or integrate the PhilHealth Claims API into your own system. Guides, client examples, and narrated videos." />
+<title>DocBen — PhilHealth Claim Validation Docs</title>
 <link rel="stylesheet" href="assets/css/docben.css" />
 <link rel="icon" type="image/png" href="assets/icons/shield.png" />
 </head>
@@ -18,11 +18,10 @@
       DocBen&nbsp;<span style="color:var(--brand-light)">Docs</span>
     </a>
     <span class="spacer"></span>
-    <a class="navlink" href="cf4-api/">Guide</a>
-    <a class="navlink" href="cf4-api/examples/">Examples</a>
-    <a class="navlink" href="cf4-api/test-client/">Test Client</a>
+    <a class="navlink" href="webapp/">Web App</a>
+    <a class="navlink" href="cf4-api/">API</a>
     <a class="navlink" href="#videos">Videos</a>
-    <a class="cta" href="cf4-api/">Get Started</a>
+    <a class="cta" href="#paths">Get Started</a>
   </div>
 </nav>
 
@@ -30,19 +29,21 @@
 <header class="hero">
   <div class="container">
     <div>
-      <span class="eyebrow">PhilHealth Claims API</span>
+      <span class="eyebrow">PhilHealth claim validation</span>
       <h1>Validate every claim <span class="accent">before you submit</span> to PhilHealth.</h1>
       <p class="lede">
-        Catch missing fields, inconsistencies, and rule violations in seconds — so your team
-        fixes issues once and submits clean the first time. Fewer denials, faster reimbursement.
+        Catch missing fields, inconsistencies, and rule violations — so your team fixes issues
+        once and submits clean the first time. Fewer denials, faster reimbursement.
+        Use the DocBen web app, or build validation into your own system with the API.
       </p>
       <div class="actions">
-        <a class="btn btn-primary" href="cf4-api/">Read the integration guide</a>
-        <a class="btn btn-ghost" href="videos/claims-api-promo.mp4">▶ Watch the 52s promo</a>
+        <a class="btn btn-primary" href="webapp/">Use the web app</a>
+        <a class="btn btn-ghost" href="cf4-api/">Integrate the API</a>
+        <a class="btn btn-ghost" href="videos/claims-api-promo.mp4">▶ 52s promo</a>
       </div>
     </div>
     <div class="hero-art">
-      <img src="assets/img/flow-validation.svg" alt="How claim validation works — your system sends JSON or eClaims XML to the DocBen validator, which checks completeness, consistency, and PhilHealth rules, then returns an instant result so you can submit clean." />
+      <img src="assets/img/flow-validation.svg" alt="How claim validation works — you enter a claim in the DocBen web app or send it through the API; the DocBen validator checks completeness, consistency, and PhilHealth rules, then returns a result so you can fix issues and submit clean." />
     </div>
   </div>
 </header>
@@ -52,22 +53,106 @@
   <div class="container">
     <span class="item"><img src="assets/icons/shield.png" alt="" /> Validate against PhilHealth rules</span>
     <span class="item"><img src="assets/icons/chart.png" alt="" /> Quality score + rejection reasons</span>
-    <span class="item"><img src="assets/icons/doc.png" alt="" /> DocBen JSON or eClaims 3.0 XML</span>
-    <span class="item"><img src="assets/icons/wave.png" alt="" /> Async results in seconds</span>
-    <span class="item"><img src="assets/icons/edit.png" alt="" /> REST API — integrate in minutes</span>
+    <span class="item"><img src="assets/icons/doc.png" alt="" /> Supporting documents checked too</span>
+    <span class="item"><img src="assets/icons/wave.png" alt="" /> Results in under a minute</span>
+    <span class="item"><img src="assets/icons/edit.png" alt="" /> Web app or REST API</span>
   </div>
 </div>
 
 <main>
 
-  <!-- ── Why validate first ────────────────────────────── -->
-  <section class="section">
+  <!-- ── Choose your path ──────────────────────────────── -->
+  <section class="section" id="paths">
     <div class="container">
-      <div class="kicker">Why pre-submission validation</div>
+      <div class="kicker">Two ways to adopt DocBen</div>
+      <h2>Choose the path that fits how your team works.</h2>
+      <p class="sub">
+        Both paths run the same validation engine against the same PhilHealth rules.
+        The difference is how claims get in: typed into a browser, or sent by your own software.
+      </p>
+
+      <div class="grid cols-2">
+
+        <!-- Path A: web app -->
+        <div class="path-card">
+          <span class="path-tag">Path A · Web app</span>
+          <h3>DocBen web app</h3>
+          <p class="tagline">Enter and validate claims right in your browser — no development needed.</p>
+          <ul>
+            <li>Fill in the CF4 form section by section</li>
+            <li>Attach supporting documents (images or PDF)</li>
+            <li>Click <strong>Validate Claim</strong> and see every issue on screen</li>
+            <li>Fix, re-validate, then save drafts and track your claims</li>
+          </ul>
+          <p class="best-for"><strong>Best for:</strong> billing and records staff, clinics, and hospitals that want to start validating claims today.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="webapp/">Web app guide</a>
+            <a class="btn btn-ghost" href="https://lrama1.github.io/docben-ai3/">Open the web app ↗</a>
+          </div>
+        </div>
+
+        <!-- Path B: API -->
+        <div class="path-card">
+          <span class="path-tag">Path B · API</span>
+          <h3>DocBen API</h3>
+          <p class="tagline">Validate claims straight from your own system, automatically.</p>
+          <ul>
+            <li>REST API with API-key auth and an OpenAPI spec</li>
+            <li>Send DocBen JSON or the official eClaims 3.0 XML</li>
+            <li>Submit, then poll for the score, rejection reasons, and DRG</li>
+            <li>Client examples in JavaScript and TypeScript</li>
+          </ul>
+          <p class="best-for"><strong>Best for:</strong> hospitals and software vendors with an existing HIS, EMR, or billing system.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="cf4-api/">Integration guide</a>
+            <a class="btn btn-ghost" href="cf4-api/openapi.yaml">OpenAPI spec</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead>
+            <tr><th></th><th>Path A · Web app</th><th>Path B · API</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">How claims get in</th>
+              <td>Typed into the CF4 form, or imported from CF4 JSON files</td>
+              <td>Sent by your system as DocBen JSON or eClaims 3.0 XML</td>
+            </tr>
+            <tr>
+              <th scope="row">How you get access</th>
+              <td>Create an account, then enter the registration code from your administrator</td>
+              <td>An API key issued by your DocBen account manager</td>
+            </tr>
+            <tr>
+              <th scope="row">Where you see results</th>
+              <td>The <em>AI Analysis</em> panel on the claim form</td>
+              <td>JSON returned when you poll for the validation result</td>
+            </tr>
+            <tr>
+              <th scope="row">Engineering effort</th>
+              <td>None</td>
+              <td>Integration work in your own system</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="compare-note"><strong>Either way you get</strong> a 0–100 quality score, the exact rejection reasons, and the PhilHealth DRG classification.</p>
+    </div>
+  </section>
+
+  <!-- ── Why validate first ────────────────────────────── -->
+  <section class="section alt">
+    <div class="container">
+      <div class="kicker">What you get on either path</div>
       <h2>Stop reacting to denials. Start preventing them.</h2>
       <p class="sub">
         A denied claim means rework, delay, and lost revenue. The DocBen validator checks every claim
-        the moment it's created — before it ever reaches PhilHealth — and tells you exactly what to fix.
+        before it ever reaches PhilHealth — whether it's typed into the web app or sent through the API —
+        and tells you exactly what to fix.
       </p>
       <div class="grid cols-3">
         <div class="card hover">
@@ -89,56 +174,41 @@
     </div>
   </section>
 
-  <!-- ── Videos ────────────────────────────────────────── -->
-  <section class="section alt" id="videos">
-    <div class="container">
-      <div class="kicker">Watch</div>
-      <h2>See it in action</h2>
-      <p class="sub">A quick promo plus two narrated, hands-on walkthroughs of the full integration flow.</p>
-      <div class="grid cols-3">
-        <a class="card video-card" href="videos/claims-api-promo.mp4">
-          <div class="thumb">
-            <img src="assets/img/flow-validation.svg" alt="" />
-            <span class="badge">Promo · 52s</span>
-            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
-          </div>
-          <div class="body">
-            <h3>Catch It Before PhilHealth Does</h3>
-            <p>Why pre-submission validation prevents denials and speeds reimbursement.</p>
-          </div>
-        </a>
-        <a class="card video-card" href="videos/api-integration-test-client.mp4">
-          <div class="thumb">
-            <img src="assets/img/shot-client-result.png" alt="" />
-            <span class="badge">Walkthrough · 1m</span>
-            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
-          </div>
-          <div class="body">
-            <h3>Test Client Walkthrough</h3>
-            <p>Use the browser sandbox to verify your API key and explore the API — then integrate programmatically via the guide.</p>
-          </div>
-        </a>
-        <a class="card video-card" href="videos/api-integration-curl.mp4">
-          <div class="thumb">
-            <img src="assets/img/shot-client-xml.png" alt="" />
-            <span class="badge">curl · 1m</span>
-            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
-          </div>
-          <div class="body">
-            <h3>curl / HTTP Walkthrough</h3>
-            <p>The raw requests — auth, quota, submit, poll, and the completed result JSON.</p>
-          </div>
-        </a>
+  <!-- ── Path A: Web app ───────────────────────────────── -->
+  <section class="section" id="webapp">
+    <div class="container split">
+      <div>
+        <div class="kicker">Path A · Web app</div>
+        <h3>From a blank form to a clean claim</h3>
+        <p class="sub" style="margin-bottom:0">
+          The DocBen web app walks your team through the PhilHealth CF4 and flags every problem
+          before the claim goes out — no integration work required.
+        </p>
+        <ol class="steps">
+          <li><strong>Sign in.</strong> Create an account and enter the registration code from your administrator.</li>
+          <li><strong>Create a claim.</strong> Fill in the six CF4 sections: HCI, patient, reason for admission, course in the ward, drugs, and outcome.</li>
+          <li><strong>Attach documents.</strong> Upload lab results, imaging reports, and other supporting files.</li>
+          <li><strong>Validate.</strong> The AI Analysis panel lists each issue and explains why.</li>
+          <li><strong>Fix and re-validate</strong> until it reads <em>“This is likely valid.”</em></li>
+        </ol>
+        <div class="actions">
+          <a class="btn btn-primary" href="webapp/">Read the web app guide</a>
+          <a class="btn btn-ghost" href="videos/docben-ai-create-claim-demo.mp4">▶ Watch the 3½-min demo</a>
+        </div>
       </div>
+      <figure>
+        <img class="shot" src="assets/img/shot-webapp-findings.png" alt="The DocBen web app showing the AI Analysis panel listing four issues found in a pneumonia claim: unsupported symptoms, an unsupported chest exam, missing doctor's orders, and a missing chest X-ray report." />
+        <figcaption>The AI Analysis panel lists each issue it found — and why.</figcaption>
+      </figure>
     </div>
   </section>
 
-  <!-- ── How it works (split) ──────────────────────────── -->
-  <section class="section">
+  <!-- ── Path B: API ───────────────────────────────────── -->
+  <section class="section alt" id="api">
     <div class="container split">
       <div>
-        <div class="kicker">For developers</div>
-        <h3>Everything you need to integrate</h3>
+        <div class="kicker">Path B · API</div>
+        <h3>Build validation into your own system</h3>
         <p class="sub" style="margin-bottom:0">
           A simple REST API with API-key auth, a machine-readable OpenAPI spec, copy-paste client
           examples, and a zero-dependency browser test client to exercise the live API.
@@ -156,13 +226,74 @@
     </div>
   </section>
 
+  <!-- ── Videos ────────────────────────────────────────── -->
+  <section class="section" id="videos">
+    <div class="container">
+      <div class="kicker">Watch</div>
+      <h2>See it in action</h2>
+      <p class="sub">A quick promo, a full web app demo, and two narrated API walkthroughs.</p>
+      <div class="grid cols-2">
+        <a class="card video-card" href="videos/claims-api-promo.mp4">
+          <div class="thumb">
+            <img src="assets/img/flow-validation.svg" alt="" />
+            <span class="badge">Promo · 52s</span>
+            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
+          </div>
+          <div class="body">
+            <h3>Catch It Before PhilHealth Does</h3>
+            <p>Why pre-submission validation prevents denials and speeds reimbursement.</p>
+          </div>
+        </a>
+        <a class="card video-card" href="videos/docben-ai-create-claim-demo.mp4">
+          <div class="thumb">
+            <img src="assets/img/shot-webapp-findings.png" alt="" />
+            <span class="badge">Demo · 3m 39s</span>
+            <span class="badge path">Web app</span>
+            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
+          </div>
+          <div class="body">
+            <h3>Create and Validate a Claim in the Web App</h3>
+            <p>Fill in the CF4, attach documents, validate, read the findings, fix them, and re-validate.</p>
+          </div>
+        </a>
+        <a class="card video-card" href="videos/api-integration-test-client.mp4">
+          <div class="thumb">
+            <img src="assets/img/shot-client-result.png" alt="" />
+            <span class="badge">Walkthrough · 1m</span>
+            <span class="badge path">API</span>
+            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
+          </div>
+          <div class="body">
+            <h3>Test Client Walkthrough</h3>
+            <p>Use the browser sandbox to verify your API key and explore the API — then integrate programmatically via the guide.</p>
+          </div>
+        </a>
+        <a class="card video-card" href="videos/api-integration-curl.mp4">
+          <div class="thumb">
+            <img src="assets/img/shot-client-xml.png" alt="" />
+            <span class="badge">curl · 1m</span>
+            <span class="badge path">API</span>
+            <span class="play"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
+          </div>
+          <div class="body">
+            <h3>curl / HTTP Walkthrough</h3>
+            <p>The raw requests — auth, quota, submit, poll, and the completed result JSON.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ── CTA band ──────────────────────────────────────── -->
   <section class="section" style="padding-top:0">
     <div class="container">
       <div class="cta-band">
         <h2>Ready to submit clean claims?</h2>
-        <p>Request an API key from your DocBen account manager — keys are issued per client and shown only once.</p>
-        <a class="btn btn-light" href="cf4-api/">Start with the integration guide</a>
+        <p>Start in the web app today, or request an API key from your DocBen account manager to integrate — keys are issued per client and shown only once.</p>
+        <div class="actions">
+          <a class="btn btn-light" href="webapp/">Start with the web app</a>
+          <a class="btn btn-outline-light" href="cf4-api/">Start with the API guide</a>
+        </div>
       </div>
     </div>
   </section>
@@ -179,6 +310,12 @@
       <p style="color:var(--muted);font-size:13px;margin:0">
         Validate PhilHealth claims before submission. Fewer denials, faster reimbursement.
       </p>
+    </div>
+    <div class="col">
+      <h4>Web app</h4>
+      <a href="webapp/">Web App Guide</a>
+      <a href="https://lrama1.github.io/docben-ai3/">Open the Web App</a>
+      <a href="videos/docben-ai-create-claim-demo.mp4">Web App Demo Video</a>
     </div>
     <div class="col">
       <h4>API</h4>

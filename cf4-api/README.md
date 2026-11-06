@@ -14,6 +14,8 @@ Welcome! This guide shows you how to integrate your system with the **DocBen Phi
 > **Protocol:** HTTPS + JSON
 > **Auth:** API key (`x-api-key` header)
 
+> 👉 **Not integrating?** DocBen offers two ways to adopt claim validation: this **API** (Path B) and the **DocBen web app** (Path A), where your team enters a claim and validates it on screen with no development. See the [web app guide](../webapp/).
+
 > 🎬 **Prefer video?**
 > - [Promo: catch it before PhilHealth does](../videos/claims-api-promo.mp4) — a 52-second overview.
 > - [Test client walkthrough](../videos/api-integration-test-client.mp4) — use the browser sandbox to verify your key and explore the API (not the integration method itself).
@@ -51,7 +53,7 @@ The DocBen PhilHealth Claims API lets you submit a claim (patient info, history,
 - a list of **rejection reasons** (issues that would cause PhilHealth to deny the claim), and
 - optional **DRG classification**.
 
-**Two ways to submit a claim:**
+**Two claim formats:**
 
 1. **JSON (DocBen proprietary format)** — a structured JSON payload describing the claim (see [Claim Payload Fields](#cf4-payload-fields)).
 2. **XML (official PhilHealth eClaims 3.0)** — send the standard eClaims 3.0 XML document and the API translates it to the internal format before validating. See [Submitting as eClaims 3.0 XML](#submitting-as-eclaims-30-xml).

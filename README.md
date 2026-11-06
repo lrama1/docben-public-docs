@@ -7,8 +7,10 @@ a static site (e.g. via GitHub Pages).
 
 | Path | What it is |
 |---|---|
-| [`index.html`](index.html) | Landing page linking to everything below |
-| [`cf4-api/`](cf4-api/) | **PhilHealth Claims API** — everything a 3rd-party integrator needs |
+| [`index.html`](index.html) | Landing page presenting the two adoption paths (web app / API) |
+| [`webapp/`](webapp/) | **Path A — DocBen web app** guide (enter and validate claims in the browser) |
+| [`cf4-api/`](cf4-api/) | **Path B — PhilHealth Claims API** — everything a 3rd-party integrator needs |
+| [`videos/`](videos/) | Promo, web app demo, and API walkthrough videos |
 | [`cf4-api/README.md`](cf4-api/README.md) | Integration guide (auth, quotas, endpoints, attachments, samples, errors, FAQ) |
 | [`cf4-api/openapi.yaml`](cf4-api/openapi.yaml) | OpenAPI 3.0 spec (generate SDKs, import to Postman, render docs) |
 | [`cf4-api/examples/`](cf4-api/examples/) | JavaScript + TypeScript client examples |

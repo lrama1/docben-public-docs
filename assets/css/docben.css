@@ -82,7 +82,7 @@ a:hover { text-decoration: underline; }
 }
 .hero h1 { font-size: clamp(34px, 5vw, 56px); line-height: 1.08; margin: 0 0 18px; font-weight: 800; letter-spacing: -0.02em; }
 .hero h1 .accent { color: var(--brand-light); }
-.hero p.lede { font-size: clamp(16px, 2vw, 19px); color: var(--muted); max-width: 36ch; margin: 0 0 32px; }
+.hero p.lede { font-size: clamp(16px, 2vw, 19px); color: var(--muted); max-width: 46ch; margin: 0 0 32px; }
 .hero .actions { display: flex; gap: 14px; flex-wrap: wrap; }
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
@@ -193,3 +193,58 @@ a.card, .card.hover:hover { color: var(--text); }
 .topbar .spacer { flex: 1; }
 .topbar a.backlink { color: var(--accent); font-size: 13px; font-weight: 600; }
 .topbar a.backlink:hover { text-decoration: none; }
+
+/* -- Two adoption paths (landing page) -------------------------------- */
+.path-card {
+  display: flex; flex-direction: column;
+  background: var(--panel2); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 32px; box-shadow: var(--shadow-sm);
+  transition: border-color .15s, box-shadow .15s;
+}
+.path-card:hover { border-color: var(--accent); box-shadow: var(--shadow-md); }
+.path-card .path-tag {
+  align-self: flex-start; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--brand-light); background: rgba(25,118,210,.16); border: 1px solid rgba(66,165,245,.35);
+  padding: 4px 11px; border-radius: 999px; margin-bottom: 16px;
+}
+.path-card h3 { margin: 0 0 6px; font-size: 24px; font-weight: 800; }
+.path-card .tagline { margin: 0 0 18px; color: var(--text); font-size: 15px; }
+.path-card ul { margin: 0 0 18px; padding: 0; list-style: none; }
+.path-card ul li { position: relative; padding-left: 26px; margin-bottom: 10px; color: var(--muted); font-size: 14px; }
+.path-card ul li::before { content: '\2713'; position: absolute; left: 0; top: 0; color: var(--success); font-weight: 700; }
+.path-card .best-for { margin: auto 0 22px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
+.path-card .best-for strong { color: var(--text); }
+.path-card .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.path-card .btn { padding: 11px 18px; font-size: 14px; }
+
+/* comparison table */
+.compare-wrap { margin-top: 36px; overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.compare { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 640px; }
+.compare th, .compare td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.compare tr:last-child th, .compare tr:last-child td { border-bottom: 0; }
+.compare thead th { background: var(--panel2); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--brand-light); }
+.compare tbody th { width: 22%; color: var(--text); font-weight: 600; background: rgba(255,255,255,.02); }
+.compare td { color: var(--muted); width: 39%; }
+.compare-note { margin: 16px 2px 0; color: var(--muted); font-size: 14px; }
+.compare-note strong { color: var(--text); }
+
+/* numbered steps */
+.steps { counter-reset: step; margin: 18px 0 0; padding: 0; list-style: none; }
+.steps li { counter-increment: step; position: relative; padding-left: 44px; margin-bottom: 16px; color: var(--muted); font-size: 15px; }
+.steps li strong { color: var(--text); }
+.steps li::before {
+  content: counter(step); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(25,118,210,.2); border: 1px solid rgba(66,165,245,.4); color: var(--brand-light); font-weight: 700; font-size: 14px;
+}
+.split .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.split figure { margin: 0; }
+.split figcaption { margin-top: 12px; color: var(--muted); font-size: 13px; text-align: center; }
+
+/* path label on video cards */
+.video-card .badge.path { left: auto; right: 12px; color: #fff; background: rgba(25,118,210,.92); border-color: transparent; }
+
+/* outline button for the blue CTA band */
+.cta-band .btn-outline-light { background: transparent; color: #fff; border-color: rgba(255,255,255,.7); }
+.cta-band .btn-outline-light:hover { background: rgba(255,255,255,.12); border-color: #fff; }
+.cta-band .actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }

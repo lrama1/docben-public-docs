@@ -15,11 +15,11 @@
 
   <rect width="900" height="300" rx="16" fill="url(#band)" stroke="#33415480"/>
 
-  <!-- Step 1: Your system -->
+  <!-- Step 1: Your claim (entered in the web app, or sent through the API) -->
   <g>
     <rect x="40" y="100" width="180" height="100" rx="12" fill="#1a2230" stroke="#4f9cf9" stroke-opacity="0.5"/>
-    <text x="130" y="140" text-anchor="middle" fill="#e6edf3" font-size="18" font-weight="700">Your system</text>
-    <text x="130" y="168" text-anchor="middle" fill="#8b98a9" font-size="13">JSON or eClaims XML</text>
+    <text x="130" y="140" text-anchor="middle" fill="#e6edf3" font-size="18" font-weight="700">Your claim</text>
+    <text x="130" y="168" text-anchor="middle" fill="#8b98a9" font-size="13">web app or API</text>
   </g>
   <line x1="220" y1="150" x2="290" y2="150" stroke="#4f9cf9" stroke-width="2.5" marker-end="url(#arrow)"/>
 
