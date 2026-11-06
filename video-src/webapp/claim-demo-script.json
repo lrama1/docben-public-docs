@@ -1,0 +1,25 @@
+{
+  "voice": "en-US-JennyNeural",
+  "beats": [
+    { "key": "intro", "text": "Welcome to Doc Ben A.I. In this quick demo, we'll create a PhilHealth C.F.4 claim, attach supporting documents, and let the A.I. validate it before it is submitted." },
+    { "key": "login", "text": "First, sign in with your user I.D. and password." },
+    { "key": "loginwait", "compress": true, "text": "Signing in takes a few seconds." },
+    { "key": "welcome", "text": "After a short notice about using fictional data only, choose Create Claims to start a new C.F.4 form." },
+    { "key": "hci", "text": "The form follows the official C.F.4 in six sections. Section one is the hospital's information." },
+    { "key": "patient", "text": "Section two is the patient's data: name, PhilHealth number, age and sex, the case rate code, the diagnoses, and the admission and discharge dates." },
+    { "key": "reason", "text": "Section three covers the reason for admission. Enter the history of present illness, tick the presenting symptoms, and record the physical examination." },
+    { "key": "course", "text": "Section four is the course in the ward, with the doctor's orders for each day of the stay." },
+    { "key": "drugs", "text": "Section five lists the drugs and medicines given, and section six records the outcome." },
+    { "key": "attach", "text": "Next, attach the supporting documents. Click Select Files, and choose the file. Here we add the patient's blood count result. Files upload right away, with progress shown." },
+    { "key": "validate", "text": "The form is complete, so click Validate Claim." },
+    { "key": "validating", "compress": true, "text": "The A.I. now checks the whole claim against PhilHealth rules, including the attachments. This usually takes under a minute, so we've sped it up." },
+    { "key": "findings", "text": "And here are the findings. The A.I. flags each problem and explains why. It found that doctor's orders are missing for two days, that the symptoms and chest findings do not support a pneumonia diagnosis, and that the chest X-ray report is missing." },
+    { "key": "fixorders", "text": "Let's fix these. First, add the missing doctor's orders for the twelfth and the thirteenth." },
+    { "key": "fixsymptoms", "text": "Next, tick the symptoms that were documented: cough, shortness of breath, and chest pain. Then update the chest exam to show the crackles and decreased breath sounds." },
+    { "key": "fixattach", "text": "Then attach the chest X-ray report." },
+    { "key": "revalidate", "text": "Now validate the claim again." },
+    { "key": "revalidating", "compress": true, "text": "The A.I. re-checks the corrected claim." },
+    { "key": "success", "text": "This time the claim passes. The A.I. reports that it is likely valid, and suggests the D.R.G. classification. The claim is ready for submission." },
+    { "key": "outro", "text": "That's how Doc Ben A.I. catches problems before a claim is filed. Thanks for watching." }
+  ]
+}

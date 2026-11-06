@@ -6,3 +6,8 @@ videos/raw/
 videos/narration/
 videos/promo/
 videos/timing-*.json
+
+# Video tooling: dependencies + generated work files (recordings, narration, frames).
+video-src/node_modules/
+video-src/webapp/demo/
+video-src/**/__pycache__/

@@ -24,3 +24,6 @@ defaults:
 exclude:
   - .ai-coding
   - "**/.ai-coding/**"
+  # Video-generation tooling: source only, never served on the site.
+  - video-src
+  - "video-src/**"

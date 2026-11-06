@@ -1,0 +1,69 @@
+{
+  "voice": "en-US-JennyNeural",
+  "scenes": [
+    {
+      "id": "hook",
+      "dur": 4.2,
+      "narration": "One in five PhilHealth claims gets denied.",
+      "bg": "dark",
+      "accent": "error",
+      "headline": "1 in 5 claims\ndenied.",
+      "sub": "Every denial means rework, delay, and lost revenue."
+    },
+    {
+      "id": "pain",
+      "dur": 4.6,
+      "narration": "Missing fields. Inconsistent data. Weeks of back-and-forth before you ever see reimbursement.",
+      "bg": "dark",
+      "accent": "error",
+      "headline": "The cost of a\ndirty claim",
+      "sub": "Missing fields · inconsistent data · weeks of delay"
+    },
+    {
+      "id": "turn",
+      "dur": 4.4,
+      "narration": "What if you could catch every problem before PhilHealth does?",
+      "bg": "brand",
+      "accent": "white",
+      "headline": "Catch it before\nPhilHealth does.",
+      "sub": ""
+    },
+    {
+      "id": "product",
+      "dur": 5.4,
+      "narration": "DocBen validates every claim the moment it's created — checking completeness, consistency, and PhilHealth rules in seconds.",
+      "bg": "brand",
+      "accent": "white",
+      "headline": "Validate every claim,\nbefore you submit.",
+      "sub": "Completeness · consistency · PhilHealth rules — in seconds"
+    },
+    {
+      "id": "proof",
+      "dur": 5.2,
+      "narration": "You get a quality score, the exact rejection reasons, and the DRG classification — so your team fixes issues once, and submits clean the first time.",
+      "bg": "dark",
+      "accent": "success",
+      "headline": "Score · reasons · DRG",
+      "sub": "Fix it once. Submit clean the first time."
+    },
+    {
+      "id": "integrate",
+      "dur": 5.0,
+      "narration": "Use it your way. Enter claims in the DocBen web app and validate on screen, or integrate the API into your own system.",
+      "bg": "dark",
+      "accent": "info",
+      "headline": "Two ways to use DocBen",
+      "sub": "A · Web app   |   B · API"
+    },
+    {
+      "id": "cta",
+      "dur": 4.6,
+      "narration": "Stop reacting to denials. Start preventing them. DocBen — catch it before PhilHealth does.",
+      "bg": "brand",
+      "accent": "white",
+      "headline": "Stop reacting to denials.\nStart preventing them.",
+      "sub": "docs.docbenai.com",
+      "logo": true
+    }
+  ]
+}
