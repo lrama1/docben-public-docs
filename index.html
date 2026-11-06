@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="DocBen — validate PhilHealth claims before you submit them. Use the DocBen web app, or integrate the PhilHealth Claims API into your own system. Guides, client examples, and narrated videos." />
 <title>DocBen — PhilHealth Claim Validation Docs</title>
-<link rel="stylesheet" href="assets/css/docben.css?v=20261105b" />
+<link rel="stylesheet" href="assets/css/docben.css?v=20261106a" />
 <link rel="icon" type="image/png" href="assets/icons/shield.png" />
 </head>
 <body>
@@ -34,21 +34,23 @@
         Catch missing fields, inconsistencies, and rule violations — so your team fixes issues
         once and submits clean the first time. Fewer denials, faster reimbursement.
       </p>
-      <div class="hero-paths-label">Two ways to use DocBen — pick one:</div>
+      <div class="hero-paths-label">Two ways to use DocBen — pick the one that fits your team:</div>
       <div class="hero-paths">
         <a class="hero-path" href="webapp/">
           <span class="hp-letter">A</span>
           <span class="hp-text">
+            <span class="hp-for">For clinical &amp; billing teams</span>
             <strong>Use the web app</strong>
-            <span>Enter claims in your browser and validate on screen. No coding.</span>
+            <span>Enter a claim in your browser and see exactly what to fix before you submit. No development needed.</span>
           </span>
           <span class="hp-arrow">→</span>
         </a>
         <a class="hero-path" href="cf4-api/">
           <span class="hp-letter">B</span>
           <span class="hp-text">
+            <span class="hp-for">For IT &amp; developers</span>
             <strong>Integrate the API</strong>
-            <span>Send claims from your own system and get results back automatically.</span>
+            <span>Connect your hospital system so every claim is checked automatically.</span>
           </span>
           <span class="hp-arrow">→</span>
         </a>
@@ -65,7 +67,7 @@
     <span class="item"><img src="assets/icons/chart.png" alt="" /> Quality score + rejection reasons</span>
     <span class="item"><img src="assets/icons/doc.png" alt="" /> Supporting documents checked too</span>
     <span class="item"><img src="assets/icons/wave.png" alt="" /> Results in under a minute</span>
-    <span class="item"><img src="assets/icons/edit.png" alt="" /> Web app or REST API</span>
+    <span class="item"><img src="assets/icons/edit.png" alt="" /> Web app or system integration</span>
   </div>
 </div>
 
@@ -107,7 +109,8 @@
       <h2>Choose the path that fits how your team works.</h2>
       <p class="sub">
         Both paths run the same validation engine against the same PhilHealth rules.
-        The difference is how claims get in: typed into a browser, or sent by your own software.
+        The difference is how claims get in: typed into a browser by your clinical and billing team,
+        or sent automatically by your hospital's own software, set up by your IT team.
       </p>
 
       <div class="grid cols-2">
@@ -116,7 +119,7 @@
         <div class="path-card">
           <span class="path-tag">Path A · Web app</span>
           <h3>DocBen web app</h3>
-          <p class="tagline">Enter and validate claims right in your browser — no development needed.</p>
+          <p class="tagline"><strong>For clinical and billing teams.</strong> Enter and validate claims right in your browser — no development needed.</p>
           <ul>
             <li>Fill in the CF4 form section by section</li>
             <li>Attach supporting documents (images or PDF)</li>
@@ -134,12 +137,12 @@
         <div class="path-card">
           <span class="path-tag">Path B · API</span>
           <h3>DocBen API</h3>
-          <p class="tagline">Validate claims straight from your own system, automatically.</p>
+          <p class="tagline"><strong>For IT and developers.</strong> Validate claims straight from your own system, automatically.</p>
           <ul>
-            <li>REST API with API-key auth and an OpenAPI spec</li>
-            <li>Send DocBen JSON or the official eClaims 3.0 XML</li>
-            <li>Submit, then poll for the score, rejection reasons, and DRG</li>
-            <li>Client examples in JavaScript and TypeScript</li>
+            <li>Connects to your existing hospital system (HIS, EMR, or billing software)</li>
+            <li>Accepts claims in DocBen JSON or the official PhilHealth eClaims format</li>
+            <li>Returns the score, rejection reasons, and DRG for every claim</li>
+            <li>Guide, sample code, and a test tool for your IT team</li>
           </ul>
           <p class="best-for"><strong>Best for:</strong> hospitals and software vendors with an existing HIS, EMR, or billing system.</p>
           <div class="actions">
@@ -187,7 +190,7 @@
   <section class="section" id="webapp">
     <div class="container split">
       <div>
-        <div class="kicker">Path A · Web app</div>
+        <div class="kicker">Path A · Web app · For clinical and billing teams</div>
         <h3>From a blank form to a clean claim</h3>
         <p class="sub" style="margin-bottom:0">
           The DocBen web app walks your team through the PhilHealth CF4 and flags every problem
@@ -226,11 +229,12 @@
   <section class="section alt" id="api">
     <div class="container split">
       <div>
-        <div class="kicker">Path B · API</div>
+        <div class="kicker">Path B · API · For IT and developers</div>
         <h3>Build validation into your own system</h3>
         <p class="sub" style="margin-bottom:0">
-          A simple REST API with API-key auth, a machine-readable OpenAPI spec, copy-paste client
-          examples, and a zero-dependency browser test client to exercise the live API.
+          Your IT team can connect DocBen to your existing systems. This section is for them — feel free to
+          forward it. It is a simple REST API with API-key auth, a machine-readable OpenAPI spec, copy-paste
+          client examples, and a browser test client to exercise the live API.
         </p>
         <ul>
           <li><a href="cf4-api/"><strong>Integration guide</strong></a> — auth, quotas, endpoints, attachments, errors, FAQ</li>
@@ -264,6 +268,24 @@
               <p>Auth, quota, submit, poll, and the result JSON.</p>
             </div>
           </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Good to know -->
+  <section class="section">
+    <div class="container">
+      <div class="kicker">Good to know</div>
+      <h2>What DocBen is — and isn't.</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>A pre-submission check</h3>
+          <p>DocBen tells you what PhilHealth is likely to question so your team can fix it first. It supports your review; it does not replace clinical judgment or your own billing review.</p>
+        </div>
+        <div class="card">
+          <h3>Early access</h3>
+          <p>The web app is in alpha and the product is being rolled out with a small number of hospitals. Sample data on this site is fictional.</p>
         </div>
       </div>
     </div>

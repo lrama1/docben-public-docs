@@ -113,6 +113,7 @@ a:hover { text-decoration: underline; }
 .hero-path .hp-text strong { font-size: 17px; font-weight: 800; }
 .hero-path .hp-text span { color: var(--muted); font-size: 13.5px; line-height: 1.4; }
 .hero-path .hp-arrow { position: absolute; right: 16px; top: 18px; color: var(--brand-light); font-size: 20px; font-weight: 700; }
+.hero-path .hp-text .hp-for { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--brand-light); }
 .hero-sub { margin: 16px 0 0; color: var(--muted); font-size: 14px; }
 .hero-sub a { color: var(--brand-light); }
 .btn {
