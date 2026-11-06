@@ -17,7 +17,7 @@ Welcome! This guide shows you how to integrate your system with the **DocBen Phi
 > 👉 **Not integrating?** DocBen offers two ways to adopt claim validation: this **API** (Path B) and the **DocBen web app** (Path A), where your team enters a claim and validates it on screen with no development. See the [web app guide](../webapp/).
 
 > 🎬 **Prefer video?**
-> - [Promo: catch it before PhilHealth does](../videos/claims-api-promo.mp4) — a 52-second overview.
+> - [Promo: catch it before PhilHealth does](../videos/claims-api-promo.mp4) — a 48-second overview of both ways to use DocBen.
 > - [Test client walkthrough](../videos/api-integration-test-client.mp4) — use the browser sandbox to verify your key and explore the API (not the integration method itself).
 > - [curl / HTTP walkthrough](../videos/api-integration-curl.mp4) — the raw requests in a terminal.
 
